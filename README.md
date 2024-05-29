@@ -1,6 +1,6 @@
-# Docker-проект на Laravel
+# BortPress
 
-Этот репозиторий содержит настройки Docker для проекта на Laravel с использованием Nginx, PHP-FPM, MariaDB, Redis и Composer.
+Рекламная биржа
 
 ## Содержание
 
@@ -33,7 +33,7 @@ docker-compose up -d
 
 ### Доступ к приложению
 
-Откройте `http://localhost` в вашем браузере.
+Адрес `http://localhost`.
 
 ### Доступ к базе данных
 
