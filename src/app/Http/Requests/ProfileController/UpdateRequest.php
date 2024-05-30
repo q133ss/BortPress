@@ -39,6 +39,7 @@ class UpdateRequest extends FormRequest
             'password' => 'nullable|string|min:8|max:255',
 
             'documents' => 'nullable|file',
+            'logo' => 'nullable|file',
 
             'company_name' => 'nullable|string|max:255',
             'inn' => 'nullable|string|max:255',
@@ -76,6 +77,8 @@ class UpdateRequest extends FormRequest
 
             'documents.nullable' => 'Документы не обязательны к заполнению',
             'documents.file' => 'Документы должны быть файлом',
+            'logo.nullable' => 'Документы не обязательны к заполнению',
+            'logo.file' => 'Документы должны быть файлом',
 
             'company_name.nullable' => 'Название компании не обязательно к заполнению',
             'company_name.string' => 'Название компании должно быть строкой',

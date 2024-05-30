@@ -30,24 +30,6 @@ class ProfileService
 
             $user->update($userData);
 
-            if ($request->hasFile('documents')) {
-                $oldFile = File::where('fileable_id', $user->id)
-                    ->where('fileable_type', 'App\Models\Company')
-                    ->where('category', 'documents');
-
-                if ($oldFile->exists()) {
-                    Storage::disk('public')->delete(str_replace('/storage/', '', $oldFile->pluck('src')->first()));
-                    $oldFile->delete();
-                }
-
-                File::create([
-                    'fileable_id' => $user->id,
-                    'fileable_type' => 'App\Models\Company',
-                    'category' => 'documents',
-                    'src' => env('APP_URL') . '/storage/' . $request->file('documents')->store('documents', 'public')
-                ]);
-            }
-
             $company = $user->company;
 
             if ($company == null) {
@@ -77,6 +59,42 @@ class ProfileService
                 ]);
             }
 
+            if ($request->hasFile('documents')) {
+                $oldFile = File::where('fileable_id', $company->id)
+                    ->where('fileable_type', 'App\Models\Company')
+                    ->where('category', 'documents');
+
+                if ($oldFile->exists()) {
+                    Storage::disk('public')->delete(str_replace(env('APP_URL').'/storage/', '', $oldFile->pluck('src')->first()));
+                    $oldFile->delete();
+                }
+
+                File::create([
+                    'fileable_id' => $company->id,
+                    'fileable_type' => 'App\Models\Company',
+                    'category' => 'documents',
+                    'src' => env('APP_URL') . '/storage/' . $request->file('documents')->store('documents', 'public')
+                ]);
+            }
+
+            if ($request->hasFile('logo')) {
+                $oldLogo = File::where('fileable_id', $company->id)
+                    ->where('fileable_type', 'App\Models\Company')
+                    ->where('category', 'logo');
+
+                if ($oldLogo->exists()) {
+                    Storage::disk('public')->delete(str_replace(env('APP_URL').'/storage/', '', $oldLogo->pluck('src')->first()));
+                    $oldLogo->delete();
+                }
+
+                File::create([
+                    'fileable_id' => $company->id,
+                    'fileable_type' => 'App\Models\Company',
+                    'category' => 'logo',
+                    'src' => env('APP_URL') . '/storage/' . $request->file('logo')->store('logo', 'public')
+                ]);
+            }
+
             DB::commit();
         }catch (\Exception $e){
             return Response()->json(['message' => 'Произошла ошибка, попробуйте еще раз', 'errors' => ['error' => 'Произошла ошибка, попробуйте еще раз']], 422);
@@ -85,7 +103,7 @@ class ProfileService
         return Response()->json([
             'status' => 'true',
             'user' => $user,
-            'company' => $company->load('documents')
+            'company' => $company->load('documents', 'logo')
         ]);
     }
 }

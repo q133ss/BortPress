@@ -14,4 +14,9 @@ class Company extends Model
     {
         return $this->morphOne(File::class, 'fileable')->where('category', 'documents');
     }
+
+    public function logo(): \Illuminate\Database\Eloquent\Relations\MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable')->where('category', 'logo');
+    }
 }
