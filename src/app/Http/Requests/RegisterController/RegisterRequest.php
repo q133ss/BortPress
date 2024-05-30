@@ -26,7 +26,7 @@ class RegisterRequest extends FormRequest
             'email' => 'required|email|max:255|unique:users,email',
             'phone' => 'required|max:255|regex:/^\+7\(\d{3}\)\d{3}-\d{2}-\d{2}$/|unique:users,phone',
             'role_id' => 'required|integer|exists:roles,id|in:1,2',
-            'password' => 'required|max:255|min:8|string',
+            'password' => 'required|max:255|min:8|string|confirmed',
         ];
     }
 
@@ -55,7 +55,8 @@ class RegisterRequest extends FormRequest
             'password.required' => 'Укажите пароль',
             'password.max' => 'Поле пароль не должно превышать 255 символов',
             'password.min' => 'Поле пароль должно содержать не менее 8 символов',
-            'password.string' => 'Поле пароль должно быть строкой'
+            'password.string' => 'Поле пароль должно быть строкой',
+            'password.confirmed' => 'Пароли не совпадают'
         ];
     }
 }
