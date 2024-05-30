@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('inn');
             $table->string('kpp');
+            $table->string('ogrn');
             $table->string('fact_address');
             $table->string('ur_address');
             $table->foreignId('region_id');

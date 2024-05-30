@@ -16,6 +16,6 @@ class ProfileController extends Controller
 
     public function update(UpdateRequest $request)
     {
-        return (new ProfileService())->update($request->validated());
+        return (new ProfileService())->update($request);
     }
 }
