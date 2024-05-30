@@ -49,4 +49,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function role(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Role::class, 'id', 'role_id');
+    }
+
+    public function company(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Company::class, 'user_id', 'id');
+    }
 }
