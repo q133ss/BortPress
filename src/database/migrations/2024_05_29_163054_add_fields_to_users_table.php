@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->foreignId('role_id');
             $table->string('phone');
-            $table->date('subscribe_end');
-            $table->foreignId('tariff_id');
+            $table->date('subscribe_end')->nullable();
+            $table->foreignId('tariff_id')->nullable();
         });
     }
 
