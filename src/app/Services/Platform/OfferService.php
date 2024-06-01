@@ -32,11 +32,19 @@ class OfferService
         unset($data['photo']);
 
         //Проверяем на уникальность!
-        // TODO Протестировать город!!!
+        $adCheck = Ad::where('name', $data['name'])
+            ->where('type_id', $data['type_id'])
+            ->where('inventory', $data['inventory'])
+            ->where('pay_format', $data['pay_format'])
+            ->where('region_id', $data['region_id'])
+            ->where('budget', $data['budget'])
+            ->where('start_date', $data['start_date'])
+            ->where('end_date', $data['end_date'])
+            ->where('user_id', $data['user_id'])
+            ->exists();
 
-        $ad = Ad::firstOrCreate($data);
-        if ($ad->wasRecentlyCreated) {
-
+        if (!$adCheck) {
+            $ad = Ad::create($data);
             if($request->hasFile('document')) {
                 File::create([
                     'fileable_id' => $ad->id,
