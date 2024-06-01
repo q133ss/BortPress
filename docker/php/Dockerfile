@@ -22,7 +22,11 @@ WORKDIR /var/www/html
 # Копирование приложения
 COPY ./src /var/www/html
 
-RUN composer install
+RUN pecl install redis \
+    && docker-php-ext-enable redis
+
+# Установка зависимостей Composer
+RUN composer install --ignore-platform-reqs
 
 # Настройка прав доступа
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
