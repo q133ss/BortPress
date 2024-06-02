@@ -23,10 +23,11 @@ Route::get('/roles', [App\Http\Controllers\RoleController::class, 'roles']);
 Route::post('/register', [App\Http\Controllers\RegisterController::class, 'register']);
 Route::post('/login', [App\Http\Controllers\LoginController::class, 'login']);
 
+Route::get('/types', [App\Http\Controllers\TypeController::class, 'index']);
+
 Route::group(['middleware' => 'auth:sanctum'],function (){
     Route::get('/me', [App\Http\Controllers\ProfileController::class, 'index']);
     Route::post('/me', [App\Http\Controllers\ProfileController::class, 'update']);
-
     // ЛК Продавца
     Route::group(['prefix' => 'platform'],function (){
         Route::post('/offer', [App\Http\Controllers\Platform\OfferController::class, 'create']);
