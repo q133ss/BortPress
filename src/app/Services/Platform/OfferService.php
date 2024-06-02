@@ -20,7 +20,7 @@ class OfferService
 
     //Обмен реклам трафик это без бартера и без слива!!!+++
 
-    #TODO ОБЪЯВЛЕНИЕ РАЗМЕЩАЕТСЯ НА 1 МЕСЯЦ, ЗАТЕМ АРХИВ НА ПОЛ ГОДА, ПОСЛЕ УДАЛЕНИЕ!
+    # ОБЪЯВЛЕНИЕ РАЗМЕЩАЕТСЯ НА 1 МЕСЯЦ, ЗАТЕМ АРХИВ НА ПОЛ ГОДА, ПОСЛЕ УДАЛЕНИЕ!++++
 
     #TODO Фото объявления это ЛОГО компании (либо лого борт пресса)
 
@@ -45,7 +45,10 @@ class OfferService
             ->where('user_id', $data['user_id'])
             ->exists();
 
-        $paySlugs = DB::table('pay_formats')->whereIn('id', $data['pay_format'])->pluck('slug')->all();
+        $paySlugs = DB::table('pay_formats')
+            ->whereIn('id', json_decode($data['pay_format']))
+            ->pluck('slug')
+            ->all();
 
         // Проверка форматов оплаты
         if(in_array('trade', $paySlugs) && count($paySlugs) > 1){
