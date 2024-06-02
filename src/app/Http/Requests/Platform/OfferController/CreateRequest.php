@@ -25,7 +25,7 @@ class CreateRequest extends FormRequest
             'name' => 'required|string',
             'type_id' => 'required|exists:types,id',
             'inventory' => 'required|string',
-            'pay_format' => 'required|exists:pay_formats,id',
+            'pay_format' => 'required|array',
             'region_id' => 'required|exists:regions,id',
             'budget' => 'required|integer',
             'document' => 'nullable|file',

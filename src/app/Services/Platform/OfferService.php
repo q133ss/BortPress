@@ -6,22 +6,23 @@ use App\Http\Requests\Platform\OfferController\CreateRequest;
 use App\Jobs\Platform\SearchAdsJob;
 use App\Models\Ad;
 use App\Models\File;
+use Illuminate\Support\Facades\DB;
 
 class OfferService
 {
 
     //При размещении предложения нужно искать похожие запросы и отпралять их юзеру в уведомлении
     //(Ссылка будет тупо на фильтры) ++++
-    //
     //При размещении нужно проверять нет-ли у юзера такого же объявления (но если город разный то ок) и запрещать ему его добалвять ++++
-    //
-    //Форму оплаты можно выбрать разную (Деньги и бартер), но если выбран "обмен рекламным трафиком" то выбран может быть только он!
-    //Если выбран слив, то только деньги!!
-    //Обмен реклам трафик это без бартера и без слива!!!
-    //
-    //ОБЪЯВЛЕНИЕ РАЗМЕЩАЕТСЯ НА 1 МЕСЯЦ, ЗАТЕМ АРХИВ НА ПОЛ ГОДА, ПОСЛЕ УДАЛЕНИЕ!
-    //
-    //Фото объявления это ЛОГО компании (либо лого борт пресса)
+
+    //Форму оплаты можно выбрать разную (Деньги и бартер), но если выбран "обмен рекламным трафиком" то выбран может быть только он!+++
+    //Если выбран слив, то только деньги!!+++
+
+    //Обмен реклам трафик это без бартера и без слива!!!+++
+
+    #TODO ОБЪЯВЛЕНИЕ РАЗМЕЩАЕТСЯ НА 1 МЕСЯЦ, ЗАТЕМ АРХИВ НА ПОЛ ГОДА, ПОСЛЕ УДАЛЕНИЕ!
+
+    #TODO Фото объявления это ЛОГО компании (либо лого борт пресса)
 
     public function create(CreateRequest $request)
     {
@@ -30,20 +31,38 @@ class OfferService
 
         unset($data['document']);
         unset($data['photo']);
-
-        //TODO Форму оплаты можно выбрать разную (Деньги и бартер), но если выбран "обмен рекламным трафиком" то выбран может быть только он!
+        $data['pay_format'] = json_encode($request->pay_format);
 
         //Проверяем на уникальность!
         $adCheck = Ad::where('name', $data['name'])
             ->where('type_id', $data['type_id'])
             ->where('inventory', $data['inventory'])
-            ->where('pay_format', $data['pay_format'])
+            ->whereJsonContains('pay_format', $data['pay_format'])
             ->where('region_id', $data['region_id'])
             ->where('budget', $data['budget'])
             ->where('start_date', $data['start_date'])
             ->where('end_date', $data['end_date'])
             ->where('user_id', $data['user_id'])
             ->exists();
+
+        $paySlugs = DB::table('pay_formats')->whereIn('id', $data['pay_format'])->pluck('slug')->all();
+
+        // Проверка форматов оплаты
+        if(in_array('trade', $paySlugs) && count($paySlugs) > 1){
+            return Response()->json(['message' => 'При формате оплаты "обмен рекламным трафиком" нельзя выбрать другие варианты', 'errors' => ['error' => 'При формате оплаты "обмен рекламным трафиком" нельзя выбрать другие варианты']], 422);
+        }
+        if(in_array('sliv', $paySlugs)){
+            unset($paySlugs['cash']);
+            if(count($paySlugs) > 0){
+                return Response()->json(['message' => 'Вместе со сливом можно выбрать только денежные средства', 'errors' => ['error' => 'При формате оплаты "обмен рекламным трафиком" нельзя выбрать другие варианты']], 422);
+            }
+        }
+        if(in_array('trade', $paySlugs) ){
+            unset($paySlugs['cash']);
+            if(count($paySlugs) > 0){
+                return Response()->json(['message' => 'Вместе с "Обмен рекламным трафиком" можно выбрать только денежные средства', 'errors' => ['error' => 'При формате оплаты "обмен рекламным трафиком" нельзя выбрать другие варианты']], 422);
+            }
+        }
 
         if (!$adCheck) {
             $ad = Ad::create($data);

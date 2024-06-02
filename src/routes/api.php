@@ -28,6 +28,8 @@ Route::get('/types', [App\Http\Controllers\TypeController::class, 'index']);
 Route::group(['middleware' => 'auth:sanctum'],function (){
     Route::get('/me', [App\Http\Controllers\ProfileController::class, 'index']);
     Route::post('/me', [App\Http\Controllers\ProfileController::class, 'update']);
+
+    Route::get('/pay-formats', [App\Http\Controllers\PayFormatController::class, 'index']);
     // ЛК Продавца
     Route::group(['prefix' => 'platform'],function (){
         Route::post('/offer', [App\Http\Controllers\Platform\OfferController::class, 'create']);

@@ -9,6 +9,7 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use SplFileObject;
 
 class DatabaseSeeder extends Seeder
@@ -31,7 +32,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'user',
             'email' => 'user@email.net',
-            'password' => '$2y$12$mNAx8Lbawen/b7Od0wMPveV4/0G.decRsZEvZIHKGra5EL41Hj9oK',
+            'password' => Hash::make('password'),
             'role_id' => '1',
             'phone' => '+7(999)-999-99-00'
         ]);

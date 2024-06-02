@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->foreignId('type_id')->constrained('types')->onDelete('cascade');
             $table->string('inventory');
-            $table->enum('pay_format', ['cash', 'barter', 'trade', 'sliv']);
+            $table->json('pay_format');
             $table->foreignId('region_id')->constrained('regions')->onDelete('cascade');
             $table->unsignedBigInteger('budget');
             $table->date('start_date');
