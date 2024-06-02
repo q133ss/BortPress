@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Route;
  *
  * - ПРОВЕРКА КОМПАНИИ ?? НУЖЕН АПИ ФНС
  *
- * - СОЗДАНИЕ ОБЪЯВЛЕНИЙ
+ * + СОЗДАНИЕ ОБЪЯВЛЕНИЙ
  * - СПИСОК ОБЪЯВЛЕНИЙ
  * - ДЕТАЛКА ОБЪЯВЛЕНИЯ
  * - АРХИВ ОБЪЯВЛЕНИЙ
- * - УВЕДОМЛЕНИЯ
+ * + УВЕДОМЛЕНИЯ
  * - ПОДПИСКА
  * - ЧАТ
  *
@@ -24,6 +24,8 @@ Route::post('/register', [App\Http\Controllers\RegisterController::class, 'regis
 Route::post('/login', [App\Http\Controllers\LoginController::class, 'login']);
 
 Route::get('/types', [App\Http\Controllers\TypeController::class, 'index']);
+
+Route::get('/adv/offers', [App\Http\Controllers\OfferController::class, 'adv']);
 
 Route::group(['middleware' => 'auth:sanctum'],function (){
     Route::get('/me', [App\Http\Controllers\ProfileController::class, 'index']);
