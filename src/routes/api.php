@@ -33,5 +33,6 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
     // ЛК Продавца
     Route::group(['prefix' => 'platform'],function (){
         Route::post('/offer', [App\Http\Controllers\Platform\OfferController::class, 'create']);
+        Route::post('/offer/update/{id}', [App\Http\Controllers\Platform\OfferController::class, 'update']);
     });
 });
