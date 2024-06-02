@@ -14,10 +14,15 @@ class Ad extends Model
 
     public function photo(): \Illuminate\Database\Eloquent\Relations\MorphOne
     {
+        dd($this->owner);
         return $this->morphOne(File::class, 'fileable')
             ->where('category', 'photo')
             ->withDefault(function () {
-                //TODO return 'Тут должно быть фото компании';
+                return File::where([
+                    'fileable_id' => $this->user?->company?->id,
+                    'fileable_type' => 'App\Models\Company',
+                    'category' => 'logo'
+                ]);
             });
     }
 
@@ -76,5 +81,10 @@ class Ad extends Model
                     return $query->where('end_date', '<=', $period_to);
                 }
             );
+    }
+
+    public function owner(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

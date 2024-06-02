@@ -33,7 +33,7 @@ class ProfileService
             $company = $user->company;
 
             if ($company == null) {
-                Company::create([
+                $company = Company::create([
                     'name' => $request->company_name,
                     'user_id' => $user->id,
                     'inn' => $request->inn,
@@ -97,6 +97,7 @@ class ProfileService
 
             DB::commit();
         }catch (\Exception $e){
+            dd($e);
             return Response()->json(['message' => 'Произошла ошибка, попробуйте еще раз', 'errors' => ['error' => 'Произошла ошибка, попробуйте еще раз']], 422);
         }
 
