@@ -25,6 +25,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->text('additional_info');
             $table->string('link');
+            $table->boolean('is_offer');
             $table->boolean('is_archive')->default(0);
             $table->timestamps();
         });

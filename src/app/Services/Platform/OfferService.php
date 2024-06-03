@@ -23,9 +23,9 @@ class OfferService
 
     # ОБЪЯВЛЕНИЕ РАЗМЕЩАЕТСЯ НА 1 МЕСЯЦ, ЗАТЕМ АРХИВ НА ПОЛ ГОДА, ПОСЛЕ УДАЛЕНИЕ!++++
 
-    #TODO Фото объявления это ЛОГО компании (либо лого борт пресса)
+    # Фото объявления это ЛОГО компании (либо лого борт пресса) +++
 
-    public function create(CreateRequest $request)
+    public function create(CreateRequest $request, bool $is_offer = true)
     {
         $data = $request->validated();
         $data['user_id'] = Auth()->id();
@@ -44,6 +44,7 @@ class OfferService
             ->where('start_date', $data['start_date'])
             ->where('end_date', $data['end_date'])
             ->where('user_id', $data['user_id'])
+            ->where('is_offer', $is_offer)
             ->exists();
 
         $paySlugs = DB::table('pay_formats')
@@ -69,6 +70,7 @@ class OfferService
         }
 
         if (!$adCheck) {
+            $data['is_offer'] = $is_offer;
             $ad = Ad::create($data);
             if($request->hasFile('document')) {
                 File::create([

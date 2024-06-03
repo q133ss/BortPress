@@ -8,8 +8,13 @@ use Illuminate\Http\Request;
 class OfferController extends Controller
 {
     //Предложения рекламных площадок
-    public function adv(Request $request)
+    public function index(Request $request)
     {
-        return Ad::withFilter($request)->with('photo')->get();
+        return Ad::where('is_offer', true)->withFilter($request)->with('photo')->get();
+    }
+
+    public function show($id)
+    {
+        return Ad::findOrFail($id)->load('photo', 'document');
     }
 }

@@ -8,9 +8,12 @@ use Illuminate\Support\Facades\Route;
  *
  * - ПРОВЕРКА КОМПАНИИ ?? НУЖЕН АПИ ФНС
  *
- * + СОЗДАНИЕ ОБЪЯВЛЕНИЙ
- * - СПИСОК ОБЪЯВЛЕНИЙ #TODO доделать ЛОГО
- * - ДЕТАЛКА ОБЪЯВЛЕНИЯ
+ * + СОЗДАНИЕ ПРЕДЛОЖЕНИЙ
+ * + СПИСОК ПРЕДЛОЖЕНИЙ
+ * + ДЕТАЛКА ПРЕДЛОЖЕНИЯ
+ * + СОЗДАНИЕ ЗАПРОСОВ
+ * - СПИСОК ЗАПРОСОВ
+ * - ДЕТАЛКА ЗАПРОСА
  * - АРХИВ ОБЪЯВЛЕНИЙ
  * + УВЕДОМЛЕНИЯ
  * - ПОДПИСКА
@@ -26,6 +29,10 @@ Route::post('/login', [App\Http\Controllers\LoginController::class, 'login']);
 Route::get('/types', [App\Http\Controllers\TypeController::class, 'index']);
 
 Route::get('/adv/offers', [App\Http\Controllers\OfferController::class, 'adv']);
+Route::get('/adv/offers/{id}', [App\Http\Controllers\OfferController::class, 'show']);
+
+Route::get('/requests', [App\Http\Controllers\RequestController::class, 'index']);
+Route::get('/requests/{id}', [App\Http\Controllers\OfferController::class, 'show']);
 
 Route::group(['middleware' => 'auth:sanctum'],function (){
     Route::get('/me', [App\Http\Controllers\ProfileController::class, 'index']);
@@ -36,5 +43,10 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
     Route::group(['prefix' => 'platform'],function (){
         Route::post('/offer', [App\Http\Controllers\Platform\OfferController::class, 'create']);
         Route::post('/offer/update/{id}', [App\Http\Controllers\Platform\OfferController::class, 'update']);
+    });
+
+    Route::group(['prefix' => 'buyer'], function (){
+        Route::post('/offer', [App\Http\Controllers\Buyer\OfferController::class, 'create']);
+        Route::post('/offer/update/{id}', [App\Http\Controllers\Buyer\OfferController::class, 'update']);
     });
 });

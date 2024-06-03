@@ -14,15 +14,15 @@ class Ad extends Model
 
     public function photo(): \Illuminate\Database\Eloquent\Relations\MorphOne
     {
-        dd($this->owner);
+        $owner = $this->owner()->first();
         return $this->morphOne(File::class, 'fileable')
             ->where('category', 'photo')
-            ->withDefault(function () {
+            ->withDefault(function () use ($owner) {
                 return File::where([
-                    'fileable_id' => $this->user?->company?->id,
+                    'fileable_id' => $owner->company?->id,
                     'fileable_type' => 'App\Models\Company',
                     'category' => 'logo'
-                ]);
+                ])->first();
             });
     }
 
