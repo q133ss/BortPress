@@ -52,4 +52,6 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
         Route::post('/offer', [App\Http\Controllers\Buyer\OfferController::class, 'create']);
         Route::post('/offer/update/{id}', [App\Http\Controllers\Buyer\OfferController::class, 'update']);
     });
+
+    Route::post('/chat/create/{adv_id}', [App\Http\Controllers\ChatController::class, 'create']);
 });
