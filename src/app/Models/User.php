@@ -59,4 +59,28 @@ class User extends Authenticatable
     {
         return $this->hasOne(Company::class, 'user_id', 'id');
     }
+
+    public function chats()
+    {
+        // Получаем текущего пользователя
+        $user = $this;
+
+        // Получаем чаты, в которых участвует текущий пользователь, и последние сообщения
+        $chats = Chat::where('sender_id', $user->id)
+            ->orWhere('receiver_id', $user->id)
+            ->with(['sender.company', 'receiver.company', 'latestMessage'])
+            ->get()
+            ->map(function ($chat) use ($user) {
+                // Определяем имя компании другого пользователя в чате
+                $otherUser = $chat->sender_id === $user->id ? $chat->receiver : $chat->sender;
+                return [
+                    'chat_id' => $chat->id,
+                    'user_name' => $otherUser->name,
+                    'company_name' => $otherUser->company?->name,
+                    'latest_message' => $chat->latestMessage?->text,
+                ];
+            });
+
+        return response()->json($chats);
+    }
 }
