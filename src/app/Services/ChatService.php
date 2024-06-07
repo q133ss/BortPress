@@ -2,8 +2,11 @@
 
 namespace App\Services;
 
+use App\Http\Requests\ChatController\SendRequest;
 use App\Models\Ad;
 use App\Models\Chat;
+use App\Models\Message;
+use Pusher\Pusher;
 
 class ChatService
 {
@@ -35,5 +38,48 @@ class ChatService
         }
 
         return $chat;
+    }
+
+    public function messages(int $chat_id)
+    {
+        $chat = Chat::findOrFail($chat_id);
+        if($chat->sender_id == Auth()->id() || $chat->receiver_id == Auth()->id()){
+            return $chat->messages;
+        }else{
+            return Response()->json(['message' => 'У вас нет прав для просмотра', 'errors' => ['error' => 'У вас нет прав для просмотра']], 403);
+        }
+    }
+
+    public function send(int $chat_id, SendRequest $request)
+    {
+        $chat = Chat::findOrFail($chat_id);
+        if($chat->sender_id == Auth()->id() || $chat->receiver_id == Auth()->id()) {
+            $data = $request->validated();
+            $data['chat_id'] = $chat_id;
+            $data['user_id'] = Auth()->id();
+
+            $message = Message::create($data);
+
+            $pusher = new Pusher(
+                env('PUSHER_APP_KEY'),
+                env('PUSHER_APP_SECRET'),
+                env('PUSHER_APP_ID'),
+                [
+                    'cluster' => env('PUSHER_APP_CLUSTER'),
+                    'useTLS' => true,
+                ]
+            );
+
+            $pusher->trigger('chat-' . $chat_id, 'MessageSent', [
+                'id' => $message->id,
+                'text' => $message->text,
+                'user' => Auth()->user(),
+            ]);
+
+            return $message;
+
+        }else{
+            return Response()->json(['message' => 'У вас нет прав для просмотра', 'errors' => ['error' => 'У вас нет прав для просмотра']], 403);
+        }
     }
 }
