@@ -9,6 +9,6 @@ class RequestController extends Controller
 {
     public function index(Request $request)
     {
-        return Ad::where('is_offer', false)->withFilter($request)->with('photo')->get();
+        return Ad::where('is_offer', 0)->where('is_archive', 0)->withFilter($request)->with('photo')->get();
     }
 }

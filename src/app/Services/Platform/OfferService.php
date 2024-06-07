@@ -25,7 +25,7 @@ class OfferService
 
     # Фото объявления это ЛОГО компании (либо лого борт пресса) +++
 
-    public function create(CreateRequest $request, bool $is_offer = true)
+    public function create($request, bool $is_offer = true)
     {
         $data = $request->validated();
         $data['user_id'] = Auth()->id();
@@ -101,7 +101,7 @@ class OfferService
         ], 201);
     }
 
-    public function update(int $id, CreateRequest $request)
+    public function update(int $id, $request)
     {
         $ad = Ad::findOrFail($id);
         if($ad->user_id != Auth()->id()){

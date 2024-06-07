@@ -12,12 +12,13 @@ use Illuminate\Support\Facades\Route;
  * + СПИСОК ПРЕДЛОЖЕНИЙ
  * + ДЕТАЛКА ПРЕДЛОЖЕНИЯ
  * + СОЗДАНИЕ ЗАПРОСОВ
- * - СПИСОК ЗАПРОСОВ
- * - ДЕТАЛКА ЗАПРОСА
- * - АРХИВ ОБЪЯВЛЕНИЙ
+ * + СПИСОК ЗАПРОСОВ
+ * + ДЕТАЛКА ЗАПРОСА
+ * + АРХИВ ОБЪЯВЛЕНИЙ
  * + УВЕДОМЛЕНИЯ
  * - ПОДПИСКА
  * - ЧАТ
+ * - АДМИНКА
  *
  * TODO
  */
@@ -28,7 +29,7 @@ Route::post('/login', [App\Http\Controllers\LoginController::class, 'login']);
 
 Route::get('/types', [App\Http\Controllers\TypeController::class, 'index']);
 
-Route::get('/adv/offers', [App\Http\Controllers\OfferController::class, 'adv']);
+Route::get('/adv/offers', [App\Http\Controllers\OfferController::class, 'index']);
 Route::get('/adv/offers/{id}', [App\Http\Controllers\OfferController::class, 'show']);
 
 Route::get('/requests', [App\Http\Controllers\RequestController::class, 'index']);
@@ -37,6 +38,8 @@ Route::get('/requests/{id}', [App\Http\Controllers\OfferController::class, 'show
 Route::group(['middleware' => 'auth:sanctum'],function (){
     Route::get('/me', [App\Http\Controllers\ProfileController::class, 'index']);
     Route::post('/me', [App\Http\Controllers\ProfileController::class, 'update']);
+
+    Route::get('/profile/archive', [App\Http\Controllers\ProfileController::class, 'archive']);
 
     Route::get('/pay-formats', [App\Http\Controllers\PayFormatController::class, 'index']);
     // ЛК Продавца

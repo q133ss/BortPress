@@ -26,6 +26,7 @@ return new class extends Migration
             $table->text('additional_info');
             $table->string('link');
             $table->boolean('is_offer');
+            $table->boolean('is_selling')->default(1);
             $table->boolean('is_archive')->default(0);
             $table->timestamps();
         });
