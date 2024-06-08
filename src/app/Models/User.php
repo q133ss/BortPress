@@ -83,4 +83,12 @@ class User extends Authenticatable
 
         return response()->json($chats);
     }
+
+    public function isAdmin(): bool
+    {
+        if($this->role->slug == 'admin'){
+            return true;
+        }
+        return false;
+    }
 }

@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
  * + АРХИВ ОБЪЯВЛЕНИЙ
  * + УВЕДОМЛЕНИЯ
  * - ПОДПИСКА
- * - ЧАТ
+ * + ЧАТ
  * - АДМИНКА
  *
  * TODO
@@ -57,4 +57,8 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
     Route::get('/chats', [App\Http\Controllers\ChatController::class, 'index']);
     Route::get('/messages/{chat_id}', [App\Http\Controllers\ChatController::class, 'messages']);
     Route::post('/chat/send/{chat_id}', [App\Http\Controllers\ChatController::class, 'send']);
+});
+
+Route::middleware(['auth:sanctum', \App\Http\Middleware\IsAdmin::class])->group(function (){
+
 });
