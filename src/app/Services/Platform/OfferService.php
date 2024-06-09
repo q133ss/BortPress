@@ -101,10 +101,10 @@ class OfferService
         ], 201);
     }
 
-    public function update(int $id, $request)
+    public function update(int $id, $request, $isAdmin = false)
     {
         $ad = Ad::findOrFail($id);
-        if($ad->user_id != Auth()->id()){
+        if(!$isAdmin && $ad->user_id != Auth()->id()){
             return Response()->json(['message' => 'Forbidden', 'errors' => ['error' => 'Forbidden']], 403);
         }
 
