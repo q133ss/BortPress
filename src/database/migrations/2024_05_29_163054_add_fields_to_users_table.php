@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('phone');
             $table->date('subscribe_end')->nullable();
             $table->foreignId('tariff_id')->nullable();
+            $table->boolean('is_block')->default(0);
         });
     }
 

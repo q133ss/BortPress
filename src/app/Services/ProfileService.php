@@ -5,15 +5,20 @@ namespace App\Services;
 use App\Http\Requests\ProfileController\UpdateRequest;
 use App\Models\Company;
 use App\Models\File;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileService
 {
-    public function update(UpdateRequest $request)
+    public function update(UpdateRequest $request, $user_id = null)
     {
-        $user = Auth()->user();
+        if($user_id != null){
+            $user = User::findOrFail($user_id);
+        }else{
+            $user = Auth()->user();
+        }
 
         $userData = [
             'name' => $request->name,

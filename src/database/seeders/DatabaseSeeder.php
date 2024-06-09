@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Company;
 use App\Models\Region;
 use App\Models\Role;
 use App\Models\Type;
@@ -108,5 +109,47 @@ class DatabaseSeeder extends Seeder
         Region::find(1)->delete();
         Region::find(15)->update(['name' => str_replace('/Якутия/','/ Якутия', Region::find(15)->name)]);
         Region::find(88)->delete();
+
+        $platform = User::create([
+            'name' => 'Алексей',
+            'email' => 'platform@email.net',
+            'password' => Hash::make('password'),
+            'role_id' => 2,
+            'phone' => '+7(111)222-22-22',
+        ]);
+
+        Company::create([
+            'user_id'      => $platform->id,
+            'name'         => 'ООО Какие Люди',
+            'inn'          => '111',
+            'kpp'          => '111',
+            'ogrn'         => '111',
+            'fact_address' => 'Воронеж, проспект Революции, 1',
+            'ur_address'   => 'Москва, Красная Площадь 1',
+            'region_id'    => 37,
+            'site_url'     => 'https://google.com',
+            'description'  => 'Описание'
+        ]);
+
+        $adv = User::create([
+            'name' => 'Иван',
+            'email' => 'adv@email.net',
+            'password' => Hash::make('password'),
+            'role_id' => 1,
+            'phone' => '+7(111)222-33-33',
+        ]);
+
+        Company::create([
+            'user_id'      => $adv->id,
+            'name'         => 'ООО Рога и Копыта',
+            'inn'          => '222',
+            'kpp'          => '222',
+            'ogrn'         => '222',
+            'fact_address' => 'Воронеж, проспект Революции, 2',
+            'ur_address'   => 'Москва, Красная Площадь 2',
+            'region_id'    => 37,
+            'site_url'     => 'https://yandex.ru',
+            'description'  => 'Описание123'
+        ]);
     }
 }

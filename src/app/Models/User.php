@@ -3,10 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Http\Request;
 
 class User extends Authenticatable
 {
@@ -91,4 +93,41 @@ class User extends Authenticatable
         }
         return false;
     }
+
+    public function ads(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Ad::class, 'user_id', 'id')->where('is_archive', 0);
+    }
+
+    public function archive(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Ad::class, 'user_id', 'id')->where('is_archive', 1);
+    }
+
+    private function isJoined($query, $table): bool
+    {
+        $joins = collect($query->getQuery()->joins);
+        return $joins->pluck('table')->contains($table);
+    }
+
+
+//    public function scopeWithShowFilter($query,Request $request)
+//    {
+////        return $query->when($request->query('type_id'), function(Builder $query, int $type_id){
+////            if(!$this->isJoined($query, 'ads')){
+////                $query->leftJoin('ads', 'ads.user_id','users.id');
+////            }
+////            return $query->where('ads.type_id', $type_id);
+////        });
+//
+//        return $query->when(
+//            $request->query('type_id'),
+//            function (Builder $query, $type_id) {
+//                if(!$this->isJoined($query, 'ads')){
+//                    $query->leftJoin('ads', 'ads.user_id','users.id');
+//                }
+//                return $query->where('ads.type_id', $type_id);
+//            }
+//        );
+//    }
 }

@@ -35,7 +35,7 @@ Route::get('/adv/offers/{id}', [App\Http\Controllers\OfferController::class, 'sh
 Route::get('/requests', [App\Http\Controllers\RequestController::class, 'index']);
 Route::get('/requests/{id}', [App\Http\Controllers\OfferController::class, 'show']);
 
-Route::group(['middleware' => 'auth:sanctum'],function (){
+Route::group(['middleware' => ['auth:sanctum','blockCheck']],function (){
     Route::get('/me', [App\Http\Controllers\ProfileController::class, 'index']);
     Route::post('/me', [App\Http\Controllers\ProfileController::class, 'update']);
 
@@ -59,6 +59,7 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
     Route::post('/chat/send/{chat_id}', [App\Http\Controllers\ChatController::class, 'send']);
 });
 
-Route::middleware(['auth:sanctum', \App\Http\Middleware\IsAdmin::class])->group(function (){
-
+Route::prefix('admin')->middleware(['auth:sanctum', \App\Http\Middleware\IsAdmin::class])->group(function (){
+    Route::apiResource('platform',\App\Http\Controllers\Admin\PlatformController::class)->except('update');
+    Route::post('platform/{platform}', [\App\Http\Controllers\Admin\PlatformController::class, 'update']);
 });
