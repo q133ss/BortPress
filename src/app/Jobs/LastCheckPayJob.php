@@ -43,9 +43,15 @@ class LastCheckPayJob implements ShouldQueue
             if(PaymentBuffer::where('id', $buffer->id)->exists()){
                 $status = $service->checkStatus($buffer->pay_id);
                 if($status){
-                    Payment::find($buffer->pay_id)->update(['status' => 'done']);
+                    $payment = Payment::find($buffer->pay_id);
+                    if($payment != null) {
+                        $payment->update(['status' => 'done']);
+                    }
                 }else{
-                    Payment::find($buffer->pay_id)->update(['status' => 'fail']);
+                    $payment = Payment::find($buffer->pay_id);
+                    if($payment != null) {
+                        $payment->update(['status' => 'fail']);
+                    }
                 }
                 $buffer->delete();
             }

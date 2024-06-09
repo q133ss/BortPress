@@ -65,14 +65,13 @@ class SubscribeService
         return $statuses[rand(0,1)];
     }
 
-    #TODO проверить!
     public function checkPay(): true
     {
         $buffers = PaymentBuffer::get();
         for($i = 1; $i <= 10; $i++){
             CheckPayJob::dispatch($buffers)->delay(now()->addMinutes($i));
         }
-        LastCheckPayJob::dispatch($buffers)->delay(11);
+        LastCheckPayJob::dispatch($buffers)->delay(now()->addMinutes(11));
         return true;
     }
 }

@@ -29,5 +29,7 @@ class SubscribeCheck extends Command
         $service = new SubscribeService();
         $notPaid = $service->checkAll();
         $attemptPay = $service->attemptPay($notPaid);
+        $service->checkPay();
+        $this->info('Проверка запущена');
     }
 }

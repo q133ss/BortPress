@@ -35,7 +35,10 @@ class CheckPayJob implements ShouldQueue
         foreach ($buffers as $buffer){
             $status = $service->checkStatus($buffer->pay_id);
             if($status){
-                Payment::find($buffer->pay_id)->update(['status' => 'done']);
+                $p = Payment::find($buffer->pay_id);
+                if($p != null) {
+                    $p->update(['status' => 'done']);
+                }
                 $buffer->delete();
             }
         }

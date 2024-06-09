@@ -68,3 +68,14 @@ Route::prefix('admin')->middleware(['auth:sanctum', \App\Http\Middleware\IsAdmin
 
     Route::post('/ad/{id}', [\App\Http\Controllers\Admin\AdController::class, 'update']);
 });
+
+Route::get('/fff', function(){
+    for ($i = 0; $i < 11; $i++){
+        App\Models\PaymentBuffer::create([
+            'pay_id' => $i,
+            'user_id' => $i
+        ]);
+    }
+    (new \App\Services\Subscribe\SubscribeService())->checkPay();
+    return 111;
+});
