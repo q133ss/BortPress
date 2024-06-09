@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Company;
 use App\Models\Region;
 use App\Models\Role;
+use App\Models\Tariff;
 use App\Models\Type;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -151,5 +152,14 @@ class DatabaseSeeder extends Seeder
             'site_url'     => 'https://yandex.ru',
             'description'  => 'Описание123'
         ]);
+
+        $tariffs = [
+            'Обычный' => 999,
+            'Не обычный' => 1999
+        ];
+
+        foreach ($tariffs as $name => $price){
+            Tariff::create(['name' => $name, 'price' => $price]);
+        }
     }
 }

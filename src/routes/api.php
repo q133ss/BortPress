@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
  * + УВЕДОМЛЕНИЯ
  * - ПОДПИСКА
  * + ЧАТ
- * - АДМИНКА
+ * + АДМИНКА
  *
  * TODO
  */
@@ -36,6 +36,8 @@ Route::get('/requests', [App\Http\Controllers\RequestController::class, 'index']
 Route::get('/requests/{id}', [App\Http\Controllers\OfferController::class, 'show']);
 
 Route::group(['middleware' => ['auth:sanctum','blockCheck']],function (){
+    Route::get('/subscribe/check', [App\Http\Controllers\SubscribeController::class, 'check']);
+
     Route::get('/me', [App\Http\Controllers\ProfileController::class, 'index']);
     Route::post('/me', [App\Http\Controllers\ProfileController::class, 'update']);
 
