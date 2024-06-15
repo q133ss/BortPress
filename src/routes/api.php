@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
  * + ДЕТАЛКА ЗАПРОСА
  * + АРХИВ ОБЪЯВЛЕНИЙ
  * + УВЕДОМЛЕНИЯ
- * - ПОДПИСКА
+ * + ПОДПИСКА
  * + ЧАТ
  * + АДМИНКА
  *
@@ -28,6 +28,9 @@ Route::post('/register', [App\Http\Controllers\RegisterController::class, 'regis
 Route::post('/login', [App\Http\Controllers\LoginController::class, 'login']);
 
 Route::get('/types', [App\Http\Controllers\TypeController::class, 'index']);
+
+// Уникальные предложения
+Route::get('/index/unique', [\App\Http\Controllers\IndexController::class, 'uniques']);
 
 Route::get('/adv/offers', [App\Http\Controllers\OfferController::class, 'index']);
 Route::get('/adv/offers/{id}', [App\Http\Controllers\OfferController::class, 'show']);
@@ -67,15 +70,4 @@ Route::prefix('admin')->middleware(['auth:sanctum', \App\Http\Middleware\IsAdmin
     Route::get('/adv', [\App\Http\Controllers\Admin\AdvController::class, 'index']);
 
     Route::post('/ad/{id}', [\App\Http\Controllers\Admin\AdController::class, 'update']);
-});
-
-Route::get('/fff', function(){
-    for ($i = 0; $i < 11; $i++){
-        App\Models\PaymentBuffer::create([
-            'pay_id' => $i,
-            'user_id' => $i
-        ]);
-    }
-    (new \App\Services\Subscribe\SubscribeService())->checkPay();
-    return 111;
 });
