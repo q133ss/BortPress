@@ -39,6 +39,8 @@ Route::get('/adv/offers/{id}', [App\Http\Controllers\OfferController::class, 'sh
 Route::get('/requests', [App\Http\Controllers\RequestController::class, 'index']);
 Route::get('/requests/{id}', [App\Http\Controllers\OfferController::class, 'show']);
 
+Route::get('/unique/offers', [\App\Http\Controllers\OfferController::class, 'unique']);
+
 Route::group(['middleware' => ['auth:sanctum','blockCheck']],function (){
     Route::get('/subscribe/check', [App\Http\Controllers\SubscribeController::class, 'check']);
 
@@ -51,7 +53,9 @@ Route::group(['middleware' => ['auth:sanctum','blockCheck']],function (){
     // ЛК Продавца
     Route::group(['prefix' => 'platform'],function (){
         Route::post('/offer', [App\Http\Controllers\Platform\OfferController::class, 'create']);
+        Route::get('/offers', [App\Http\Controllers\Platform\OfferController::class, 'index']);
         Route::post('/offer/update/{id}', [App\Http\Controllers\Platform\OfferController::class, 'update']);
+        Route::delete('/offer/delete/{id}', [App\Http\Controllers\Platform\OfferController::class, 'delete']);
     });
 
     Route::group(['prefix' => 'buyer'], function (){
@@ -72,3 +76,5 @@ Route::prefix('admin')->middleware(['auth:sanctum', \App\Http\Middleware\IsAdmin
 
     Route::post('/ad/{id}', [\App\Http\Controllers\Admin\AdController::class, 'update']);
 });
+
+Route::post('/feedback', [\App\Http\Controllers\FeedbackController::class, 'store']);

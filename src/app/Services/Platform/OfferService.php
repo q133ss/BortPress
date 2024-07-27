@@ -183,4 +183,16 @@ class OfferService
             'ad' => $ad->load('photo', 'document')
         ], 200);
     }
+
+    public function delete(int $id)
+    {
+        $offer = Ad::findOrFail($id);
+        if($offer->user_id != Auth('sanctum')->id()){
+            abort(403);
+        }
+        $offer->delete();
+        return Response()->json([
+            'message' => 'true'
+        ]);
+    }
 }
