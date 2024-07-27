@@ -31,6 +31,7 @@ Route::get('/types', [App\Http\Controllers\TypeController::class, 'index']);
 
 // Уникальные предложения
 Route::get('/index/unique', [\App\Http\Controllers\IndexController::class, 'uniques']);
+Route::get('/index/catalog/{type}', [\App\Http\Controllers\IndexController::class, 'catalog']);
 
 Route::get('/adv/offers', [App\Http\Controllers\OfferController::class, 'index']);
 Route::get('/adv/offers/{id}', [App\Http\Controllers\OfferController::class, 'show']);
