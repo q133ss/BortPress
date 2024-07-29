@@ -25,6 +25,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->text('additional_info');
             $table->string('link');
+            $table->foreignId('item_id')->nullable();
             $table->boolean('is_offer');
             $table->boolean('is_selling')->default(1);
             $table->boolean('is_archive')->default(0);

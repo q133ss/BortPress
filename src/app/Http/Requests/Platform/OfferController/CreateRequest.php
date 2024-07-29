@@ -33,6 +33,7 @@ class CreateRequest extends FormRequest
             'end_date' => 'required|date_format:Y-m-d|after:start_date',
             'additional_info' => 'required|string',
             'link' => 'required|url',
+            'item_id' => 'required|exists:items,id',
             'photo' => 'nullable|file'
         ];
     }
@@ -75,6 +76,9 @@ class CreateRequest extends FormRequest
 
             'link.required' => 'Введите ссылку',
             'link.url' => 'Неверный формат ссылки',
+
+            'item_id.required' => 'Укажите товар или услугу',
+            'item_id.exists' => 'Указан неверный товар или услуга',
 
             'photo.required' => 'Загрузите фото',
             'photo.file' => 'Фото должно быть файлом'

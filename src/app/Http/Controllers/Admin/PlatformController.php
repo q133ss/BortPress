@@ -28,7 +28,6 @@ class PlatformController extends Controller
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**

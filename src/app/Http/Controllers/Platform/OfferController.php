@@ -19,6 +19,11 @@ class OfferController extends Controller
         return (new OfferService())->create($request);
     }
 
+    public function show($id)
+    {
+        return Ad::findOrFail($id)->load('photo', 'document', 'item');
+    }
+
     public function update(int $id, CreateRequest $request)
     {
         return (new OfferService())->update($id, $request);

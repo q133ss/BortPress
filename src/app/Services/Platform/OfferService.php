@@ -83,7 +83,7 @@ class OfferService
 
         return Response()->json([
             'message' => 'true',
-            'ad' => $ad->load('photo', 'document')
+            'ad' => $ad->load('photo', 'document', 'item')
         ], 201);
     }
 
@@ -180,7 +180,7 @@ class OfferService
 
         return Response()->json([
             'message' => 'true',
-            'ad' => $ad->load('photo', 'document')
+            'ad' => $ad->load('photo', 'document', 'item')
         ], 200);
     }
 

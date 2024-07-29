@@ -54,13 +54,18 @@ Route::group(['middleware' => ['auth:sanctum','blockCheck']],function (){
     Route::group(['prefix' => 'platform'],function (){
         Route::post('/offer', [App\Http\Controllers\Platform\OfferController::class, 'create']);
         Route::get('/offers', [App\Http\Controllers\Platform\OfferController::class, 'index']);
+        Route::get('/offer/{id}', [App\Http\Controllers\Platform\OfferController::class, 'show']);
         Route::post('/offer/update/{id}', [App\Http\Controllers\Platform\OfferController::class, 'update']);
         Route::delete('/offer/delete/{id}', [App\Http\Controllers\Platform\OfferController::class, 'delete']);
     });
 
     Route::group(['prefix' => 'buyer'], function (){
+        Route::get('/archive/offers', [App\Http\Controllers\Buyer\OfferController::class, 'archive']);
+        Route::get('/offers', [App\Http\Controllers\Buyer\OfferController::class, 'index']);
         Route::post('/offer', [App\Http\Controllers\Buyer\OfferController::class, 'create']);
+        Route::get('/offer/{id}', [App\Http\Controllers\Buyer\OfferController::class, 'show']);
         Route::post('/offer/update/{id}', [App\Http\Controllers\Buyer\OfferController::class, 'update']);
+        Route::delete('/offer/{id}', [App\Http\Controllers\Buyer\OfferController::class, 'delete']);
     });
 
     Route::post('/chat/create/{adv_id}', [App\Http\Controllers\ChatController::class, 'create']);
@@ -71,10 +76,13 @@ Route::group(['middleware' => ['auth:sanctum','blockCheck']],function (){
 
 Route::prefix('admin')->middleware(['auth:sanctum', \App\Http\Middleware\IsAdmin::class])->group(function (){
     Route::apiResource('platform',\App\Http\Controllers\Admin\PlatformController::class)->except('update');
-    Route::post('platform/{platform}', [\App\Http\Controllers\Admin\PlatformController::class, 'update']);
+    Route::post('platform/update/{platform}', [\App\Http\Controllers\Admin\PlatformController::class, 'update']);
     Route::get('/adv', [\App\Http\Controllers\Admin\AdvController::class, 'index']);
 
     Route::post('/ad/{id}', [\App\Http\Controllers\Admin\AdController::class, 'update']);
 });
 
 Route::post('/feedback', [\App\Http\Controllers\FeedbackController::class, 'store']);
+
+Route::get('/item/categories', [\App\Http\Controllers\ItemController::class, 'categories']);
+Route::get('/items/{category_id}', [\App\Http\Controllers\ItemController::class, 'items']);
