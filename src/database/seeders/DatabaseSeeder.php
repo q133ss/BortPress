@@ -39,7 +39,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'user@email.net',
             'password' => Hash::make('password'),
             'role_id' => '1',
-            'phone' => '+7(999)-999-99-00'
+            'phone' => '+7(999)-999-99-00',
+            'subscribe_end' => now()->addDays(30)
         ]);
 
         $formats = [
@@ -120,6 +121,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role_id' => 2,
             'phone' => '+7(111)222-22-22',
+            'subscribe_end' => now()->addDays(30)
         ]);
 
         Company::create([
@@ -141,6 +143,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role_id' => 1,
             'phone' => '+7(111)222-33-33',
+            'subscribe_end' => now()->addDays(30)
         ]);
 
         Company::create([

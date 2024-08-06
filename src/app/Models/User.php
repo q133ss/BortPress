@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -110,24 +111,14 @@ class User extends Authenticatable
         return $joins->pluck('table')->contains($table);
     }
 
+    public function subscribe_status()
+    {
+        if ($this->subscribe_end === null) {
+            return false;
+        }
 
-//    public function scopeWithShowFilter($query,Request $request)
-//    {
-////        return $query->when($request->query('type_id'), function(Builder $query, int $type_id){
-////            if(!$this->isJoined($query, 'ads')){
-////                $query->leftJoin('ads', 'ads.user_id','users.id');
-////            }
-////            return $query->where('ads.type_id', $type_id);
-////        });
-//
-//        return $query->when(
-//            $request->query('type_id'),
-//            function (Builder $query, $type_id) {
-//                if(!$this->isJoined($query, 'ads')){
-//                    $query->leftJoin('ads', 'ads.user_id','users.id');
-//                }
-//                return $query->where('ads.type_id', $type_id);
-//            }
-//        );
-//    }
+        $subscribeEndDate = Carbon::parse($this->subscribe_end);
+
+        return now()->lessThan($subscribeEndDate);
+    }
 }

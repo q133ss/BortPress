@@ -11,4 +11,14 @@ class RoleController extends Controller
     {
         return Role::whereIn('slug', ['advertiser','adv_platform'])->get();
     }
+
+    public function admin()
+    {
+        return Role::where('slug', 'admin')->first();
+    }
+
+    public function all()
+    {
+        return Role::get();
+    }
 }

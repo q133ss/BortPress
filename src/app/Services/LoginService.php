@@ -10,6 +10,9 @@ class LoginService
     {
         $user = User::where('email', $data['email'])->first();
         $token = $user->createToken('web');
-        return Response()->json(['user' => $user, 'token' => $token->plainTextToken]);
+
+        $changedUser = $user->load('role', 'company');
+        $changedUser['subscribe_status'] = $user->subscribe_status();
+        return Response()->json(['user' => $changedUser, 'token' => $token->plainTextToken]);
     }
 }

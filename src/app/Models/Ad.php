@@ -33,16 +33,22 @@ class Ad extends Model
 
     public function scopeWithFilter($query, Request $request)
     {
-        return $query->when(
+        return $query
+            ->when(
             $request->query('type_id'),
                 function (Builder $query, $type_id) {
                     return $query->where('type_id', $type_id);
                 }
             )
             ->when(
+//                $request->query('inventory'),
+//                function (Builder $query, $inventory) {
+//                    return $query->where('inventory', $inventory);
+//                }
                 $request->query('inventory'),
                 function (Builder $query, $inventory) {
-                    return $query->where('inventory', $inventory);
+                    $inventoryArray = is_array($inventory) ? $inventory : explode(',', $inventory);
+                    return $query->whereIn('inventory', $inventoryArray);
                 }
             )
             ->when(

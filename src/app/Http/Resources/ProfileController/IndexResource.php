@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class IndexResource extends JsonResource
 {
+    public static $wrap = 'user';
     /**
      * Transform the resource into an array.
      *
@@ -24,7 +25,9 @@ class IndexResource extends JsonResource
                 'slug' => $this->role?->slug
             ],
             'phone' => $this->phone,
-            'company' => $this->company
+            'company' => $this->company,
+            'subscribe_end' => $this->subscribe_end,
+            'subscribe_status' => $this->subscribe_status()
         ];
     }
 }
