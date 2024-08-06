@@ -16,6 +16,35 @@ class Ad extends Model
         'pay_format' => 'array',
     ];
 
+    public function getPayFormatAttribute($value)
+    {
+        // Проверяем, является ли значение валидным JSON
+        if ($this->isJson($value)) {
+            $decodedValue = json_decode($value, true);
+
+            // Если декодированное значение является строкой, снова декодируем его
+            if (is_string($decodedValue) && $this->isJson($decodedValue)) {
+                return json_decode($decodedValue, true);
+            }
+
+            return $decodedValue;
+        }
+
+        return $value;
+    }
+
+    // Метод для проверки, является ли строка валидным JSON
+    private function isJson($string)
+    {
+        json_decode($string);
+        return (json_last_error() == JSON_ERROR_NONE);
+    }
+
+    public function setPayFormatAttribute($value)
+    {
+        $this->attributes['pay_format'] = is_array($value) ? json_encode($value) : $value;
+    }
+
     public function photo(): \Illuminate\Database\Eloquent\Relations\MorphOne
     {
         $owner = $this->owner()->first();
