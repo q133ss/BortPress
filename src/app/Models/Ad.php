@@ -12,6 +12,10 @@ class Ad extends Model
     use HasFactory;
     protected $guarded = [];
 
+    protected $casts = [
+        'pay_format' => 'array',
+    ];
+
     public function photo(): \Illuminate\Database\Eloquent\Relations\MorphOne
     {
         $owner = $this->owner()->first();
