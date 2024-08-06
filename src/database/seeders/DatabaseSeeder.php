@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Ad;
 use App\Models\Company;
 use App\Models\Item;
 use App\Models\ItemCategory;
@@ -217,5 +218,107 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        $ads = [
+            [
+                'name' => 'Предложение 1',
+                'type_id' => 2,
+                'inventory' => 'Цифровые билборды',
+                'pay_format' => [1,2], // ["1","2"]
+                'region_id' => 37,
+                'budget' => '300000',
+                'start_date' => now()->format('Y-m-d'),
+                'end_date' => now()->addDays(30)->format('Y-m-d'),
+                'is_unique' => 1,
+                'user_id' => 2,
+                'additional_info' => 'Дополнительная информация',
+                'link' => 'https://google.com',
+                'item_id' => 3,
+                'is_offer' => 1,
+                'is_selling' => 1,
+                'is_archive' => 0
+            ],
+
+            [
+                'name' => 'Предложение 2',
+                'type_id' => 2,
+                'inventory' => 'Цифровые билборды',
+                'pay_format' => [1,2], // ["1","2"]
+                'region_id' => 37,
+                'budget' => '200000',
+                'start_date' => now()->format('Y-m-d'),
+                'end_date' => now()->addDays(30)->format('Y-m-d'),
+                'is_unique' => 1,
+                'user_id' => 2,
+                'additional_info' => 'Дополнительная информация',
+                'link' => 'https://google.com',
+                'item_id' => 3,
+                'is_offer' => 1,
+                'is_selling' => 0,
+                'is_archive' => 0
+            ],
+
+            [
+                'name' => 'Предложение 2',
+                'type_id' => 2,
+                'inventory' => 'Цифровые билборды',
+                'pay_format' => [1,2], // ["1","2"]
+                'region_id' => 37,
+                'budget' => '300000',
+                'start_date' => now()->format('Y-m-d'),
+                'end_date' => now()->addDays(30)->format('Y-m-d'),
+                'is_unique' => 1,
+                'user_id' => 2,
+                'additional_info' => 'Дополнительная информация',
+                'link' => 'https://google.com',
+                'item_id' => 3,
+                'is_offer' => 1,
+                'is_selling' => 0,
+                'is_archive' => 0
+            ],
+
+            [
+                'name' => 'Предложение 3',
+                'type_id' => 2,
+                'inventory' => 'Цифровые билборды',
+                'pay_format' => [1,2], // ["1","2"]
+                'region_id' => 37,
+                'budget' => '200000',
+                'start_date' => now()->format('Y-m-d'),
+                'end_date' => now()->addDays(30)->format('Y-m-d'),
+                'is_unique' => 0,
+                'user_id' => 2,
+                'additional_info' => 'Дополнительная информация',
+                'link' => 'https://google.com',
+                'item_id' => 3,
+                'is_offer' => 0,
+                'is_selling' => 1,
+                'is_archive' => 0
+            ],
+
+            [
+                'name' => 'Предложение 4',
+                'type_id' => 2,
+                'inventory' => 'Цифровые билборды',
+                'pay_format' => [1,2], // ["1","2"]
+                'region_id' => 37,
+                'budget' => '600000',
+                'start_date' => now()->format('Y-m-d'),
+                'end_date' => now()->addDays(30)->format('Y-m-d'),
+                'is_unique' => 0,
+                'user_id' => 2,
+                'additional_info' => 'Дополнительная информация',
+                'link' => 'https://google.com',
+                'item_id' => 3,
+                'is_offer' => 1,
+                'is_selling' => 1,
+                'is_archive' => 1
+            ],
+        ];
+
+        foreach ($ads as $ad){
+            unset($ad['pay_format']);
+            $ad['pay_format'] = json_encode([1,2]);
+            Ad::create($ad);
+        }
     }
 }

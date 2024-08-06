@@ -10,17 +10,17 @@ use Illuminate\Http\Request;
 
 class OfferController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Ad::where('user_id', Auth('sanctum')->id())
+        return Ad::withFilter($request)->where('user_id', Auth('sanctum')->id())
             ->where('is_offer', false)
             ->where('is_archive', false)
             ->get();
     }
 
-    public function archive()
+    public function archive(Request $request)
     {
-        return Ad::where('user_id', Auth('sanctum')->id())
+        return Ad::withFilter($request)->where('user_id', Auth('sanctum')->id())
             ->where('is_offer', false)
             ->where('is_archive', true)
             ->get();

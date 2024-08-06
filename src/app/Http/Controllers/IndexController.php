@@ -19,6 +19,6 @@ class IndexController extends Controller
             $is_offer = 1;
         }
 
-        return Ad::leftJoin('users', 'users.id', 'ads.user_id')->where('users.is_block', 0)->where('is_offer', $is_offer)->where('is_archive', 0)->orderBy('ads.created_at', 'DESC')->with('photo')->limit(10)->get();
+        return Ad::leftJoin('users', 'users.id', 'ads.user_id')->where('users.is_block', 0)->where('is_offer', $is_offer)->where('is_archive', 0)->orderBy('ads.created_at', 'DESC')->with('photo')->limit(10)->select('ads.*')->get();
     }
 }
