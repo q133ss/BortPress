@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Ad extends Model
 {
@@ -74,10 +75,6 @@ class Ad extends Model
                 }
             )
             ->when(
-//                $request->query('inventory'),
-//                function (Builder $query, $inventory) {
-//                    return $query->where('inventory', $inventory);
-//                }
                 $request->query('inventory'),
                 function (Builder $query, $inventory) {
                     $inventoryArray = is_array($inventory) ? $inventory : explode(',', $inventory);
@@ -118,6 +115,13 @@ class Ad extends Model
                 $request->query('period_to'),
                 function (Builder $query, $period_to) {
                     return $query->where('end_date', '<=', $period_to);
+                }
+            )
+            ->when(
+                $request->query('hot_offers'),
+                function (Builder $query, $hot_offers) {
+                    $sliv_id = DB::table('pay_formats')->where('slug', 'sliv')->pluck('id')->first();
+                    return $query->whereJsonContains('pay_format', $sliv_id);
                 }
             );
     }

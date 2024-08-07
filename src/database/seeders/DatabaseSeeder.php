@@ -264,7 +264,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Предложение 2',
                 'type_id' => 2,
                 'inventory' => 'Цифровые билборды',
-                'pay_format' => json_encode([1,2]),
+                'pay_format' => json_encode([1,2,4]),
                 'region_id' => 37,
                 'budget' => '300000',
                 'start_date' => now()->format('Y-m-d'),
