@@ -28,7 +28,14 @@ class OfferController extends Controller
 
     public function show($id)
     {
-        return Ad::findOrFail($id)->load('photo', 'document');
+        $ad =  Ad::findOrFail($id)->load('photo', 'document');
+        $ad->pay_format = PayFormat::whereIn('id', $ad->pay_format)->get();
+        $ad->region = Region::find($ad->region_id);
+        $ad->item = Item::find($ad->item);
+        $ad->user = User::find($ad->user_id);
+        unset($ad->region_id);
+        unset($ad->user_id);
+        return $ad;
     }
 
     public function unique(Request $request)
