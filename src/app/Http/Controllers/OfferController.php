@@ -27,6 +27,7 @@ class OfferController extends Controller
             ->where('ads.is_archive', 0)
             ->withFilter($request)
             ->with('photo')
+            ->select('ads.*')
             ->get();
     }
 }
