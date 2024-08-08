@@ -32,6 +32,9 @@ class StoreRequest extends FormRequest
             'region_id' => 'required|exists:regions,id',
             'site_url' => 'required|url|max:255',
             'description' => 'required|string|max:1000',
+
+            'documents' => 'nullable|file',
+            'logo' => 'nullable|file'
         ];
     }
 
@@ -66,6 +69,10 @@ class StoreRequest extends FormRequest
             'description.required' => 'Поле description обязательно для заполнения.',
             'description.string' => 'Поле description должно быть строкой.',
             'description.max' => 'Поле description не должно превышать 1000 символов.',
+            'documents.nullable' => 'Документы не обязательны к заполнению',
+            'documents.file' => 'Документы должны быть файлом',
+            'logo.nullable' => 'Документы не обязательны к заполнению',
+            'logo.file' => 'Документы должны быть файлом',
         ];
     }
 }

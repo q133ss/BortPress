@@ -19,4 +19,9 @@ class Company extends Model
     {
         return $this->morphOne(File::class, 'fileable')->where('category', 'logo');
     }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
 }
