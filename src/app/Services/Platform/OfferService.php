@@ -85,7 +85,8 @@ class OfferService
 
         return Response()->json([
             'message' => 'true',
-            'ad' => $ad->load('photo', 'document', 'item')
+            'ad' => $ad->load('photo', 'document'),
+            'items' => $ad->item()
         ], 201);
     }
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Platform\OfferController;
+namespace App\Http\Requests\Admin\AdController;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,6 +22,7 @@ class CreateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'user_id' => 'required|exists:users,id',
             'name' => 'required|string',
             'type_id' => 'required|exists:types,id',
             'inventory' => 'required|array',
@@ -34,13 +35,17 @@ class CreateRequest extends FormRequest
             'end_date' => 'required|date_format:Y-m-d|after:start_date',
             'additional_info' => 'required|string',
             'link' => 'required|url',
-            'photo' => 'nullable|file'
+            'photo' => 'nullable|file',
+            'is_offer' => 'required|boolean'
         ];
     }
 
     public function messages(): array
     {
         return [
+            'user_id.required' => 'Укажите пользователя',
+            'user_id.exists' => 'Указанного пользователя не существует',
+
             'name.required' => 'Введите название',
             'name.string' => 'Название должно быть строкой',
 
@@ -81,7 +86,10 @@ class CreateRequest extends FormRequest
             'link.url' => 'Неверный формат ссылки',
 
             'photo.required' => 'Загрузите фото',
-            'photo.file' => 'Фото должно быть файлом'
+            'photo.file' => 'Фото должно быть файлом',
+
+            'is_offer.required' => 'Укажите тип объявления',
+            'is_offer.boolean' => 'Тип объявления должен булевым значением'
         ];
     }
 }

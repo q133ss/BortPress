@@ -15,6 +15,7 @@ class Ad extends Model
 
     protected $casts = [
         'pay_format' => 'array',
+        'inventory' => 'array',
     ];
 
     public function getPayFormatAttribute($value)
@@ -168,8 +169,17 @@ class Ad extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
+//    public function item()
+//    {
+//        return $this->hasMany(Item::class, 'id', 'inventory')
+//            ->whereIn('id', $this->inventory);
+//    }
+
     public function item()
     {
-        return $this->hasOne(Item::class, 'id', 'item_id');
+        // Обработка случая, когда inventory может быть null
+        $inventoryIds = $this->inventory ?? [];
+
+        return \App\Models\Item::whereIn('id', $inventoryIds)->get();
     }
 }

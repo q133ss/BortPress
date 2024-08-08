@@ -70,8 +70,8 @@ Route::prefix('admin')->middleware(['auth:sanctum', \App\Http\Middleware\IsAdmin
     Route::apiResource('platform',\App\Http\Controllers\Admin\PlatformController::class)->except('update');
     Route::post('platform/update/{platform}', [\App\Http\Controllers\Admin\PlatformController::class, 'update']);
     Route::get('/adv', [\App\Http\Controllers\Admin\AdvController::class, 'index']);
-
-    Route::post('/ad/{id}', [\App\Http\Controllers\Admin\AdController::class, 'update']);
+    Route::get('/users', [\App\Http\Controllers\Admin\AdController::class, 'users']);
+    Route::apiResource('ad', \App\Http\Controllers\Admin\AdController::class);
 });
 
 Route::post('/feedback', [\App\Http\Controllers\FeedbackController::class, 'store']);

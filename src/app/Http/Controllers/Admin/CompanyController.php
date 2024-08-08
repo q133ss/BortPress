@@ -67,7 +67,7 @@ class CompanyController extends Controller
             ]);
         }
 
-        return response()->json($company->load('logo', 'documents'), 201);
+        return response()->json($company->load('logo', 'documents', 'user'), 201);
     }
 
     /**
@@ -75,7 +75,7 @@ class CompanyController extends Controller
      */
     public function show(string $id)
     {
-        return Company::findOrFail($id)->load('logo', 'documents');
+        return Company::findOrFail($id)->load('logo', 'documents', 'user');
     }
 
     /**
@@ -127,7 +127,7 @@ class CompanyController extends Controller
             ]);
         }
 
-        return response()->json($company->load('logo', 'documents'));
+        return response()->json($company->load('logo', 'documents', 'user'));
     }
 
     /**
