@@ -65,6 +65,7 @@ Route::group(['middleware' => ['auth:sanctum','blockCheck']],function (){
 });
 
 Route::prefix('admin')->middleware(['auth:sanctum', \App\Http\Middleware\IsAdmin::class])->group(function (){
+    Route::apiResource('company', \App\Http\Controllers\Admin\CompanyController::class);
     Route::apiResource('platform',\App\Http\Controllers\Admin\PlatformController::class)->except('update');
     Route::post('platform/update/{platform}', [\App\Http\Controllers\Admin\PlatformController::class, 'update']);
     Route::get('/adv', [\App\Http\Controllers\Admin\AdvController::class, 'index']);

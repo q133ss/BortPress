@@ -34,6 +34,23 @@ class Ad extends Model
         return $value;
     }
 
+    public function getInventoryAttribute($value)
+    {
+        // Проверяем, является ли значение валидным JSON
+        if ($this->isJson($value)) {
+            $decodedValue = json_decode($value, true);
+
+            // Если декодированное значение является строкой, снова декодируем его
+            if (is_string($decodedValue) && $this->isJson($decodedValue)) {
+                return json_decode($decodedValue, true);
+            }
+
+            return $decodedValue;
+        }
+
+        return $value;
+    }
+
     // Метод для проверки, является ли строка валидным JSON
     private function isJson($string)
     {
@@ -44,6 +61,11 @@ class Ad extends Model
     public function setPayFormatAttribute($value)
     {
         $this->attributes['pay_format'] = is_array($value) ? json_encode($value) : $value;
+    }
+
+    public function setInventoryAttribute($value)
+    {
+        $this->attributes['inventory'] = is_array($value) ? json_encode($value) : $value;
     }
 
     public function photo(): \Illuminate\Database\Eloquent\Relations\MorphOne
@@ -77,8 +99,12 @@ class Ad extends Model
             ->when(
                 $request->query('inventory'),
                 function (Builder $query, $inventory) {
-                    $inventoryArray = is_array($inventory) ? $inventory : explode(',', $inventory);
-                    return $query->whereIn('inventory', $inventoryArray);
+                    $ids = explode(',', $inventory); // Разбиваем строку на массив ID
+                    return $query->where(function ($query) use ($ids) {
+                        foreach ($ids as $id) {
+                            $query->orWhereJsonContains('inventory', (int) $id);
+                        }
+                    });
                 }
             )
             ->when(
@@ -90,9 +116,20 @@ class Ad extends Model
             ->when(
                 $request->query('pay_format'),
                 function (Builder $query, $pay_format) {
-                    return $query->whereJsonContains('pay_format', $pay_format);
+                    $ids = explode(',', $pay_format); // Разбиваем строку на массив ID
+                    return $query->where(function ($query) use ($ids) {
+                        foreach ($ids as $id) {
+                            $query->orWhereJsonContains('pay_format', (int) $id);
+                        }
+                    });
                 }
             )
+            //            ->when(
+//                $request->query('pay_format'),
+//                function (Builder $query, $pay_format) {
+//                    return $query->whereJsonContains('pay_format', $pay_format);
+//                }
+//            )
             ->when(
                 $request->query('budget_from'),
                 function (Builder $query, $budget_from) {

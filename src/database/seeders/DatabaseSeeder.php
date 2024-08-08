@@ -34,13 +34,26 @@ class DatabaseSeeder extends Seeder
             Role::create(['name' => $name, 'slug' => $slug]);
         }
 
-        User::create([
+        $usr = User::create([
             'name' => 'user',
             'email' => 'user@email.net',
             'password' => Hash::make('password'),
             'role_id' => '1',
             'phone' => '+7(999)-999-99-00',
             'subscribe_end' => now()->addDays(30)
+        ]);
+
+        Company::create([
+            'user_id' => $usr->id,
+            'name' => 'ООО Рога и Копыта',
+            'inn' => 777,
+            'kpp' => 666,
+            'ogrn' => 555,
+            'fact_address' => "Воронеж, Ленина, 1",
+            'ur_address' => "Воронеж, Ленина, 2",
+            'region_id' => 37,
+            'site_url' => "https://google.com",
+            'description' => "Описание компании",
         ]);
 
         $formats = [
@@ -225,7 +238,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Предложение 1',
                 'type_id' => 2,
-                'inventory' => 'Цифровые билборды',
+                'inventory' => json_encode([6,8]),
                 'pay_format' => json_encode([1,2]),
                 'region_id' => 37,
                 'budget' => '300000',
@@ -235,7 +248,6 @@ class DatabaseSeeder extends Seeder
                 'user_id' => 2,
                 'additional_info' => 'Дополнительная информация',
                 'link' => 'https://google.com',
-                'item_id' => 3,
                 'is_offer' => 1,
                 'is_selling' => 1,
                 'is_archive' => 0
@@ -244,7 +256,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Предложение 2',
                 'type_id' => 2,
-                'inventory' => 'Цифровые билборды',
+                'inventory' => json_encode([1,2,4]),
                 'pay_format' => json_encode([1,2]),
                 'region_id' => 37,
                 'budget' => '200000',
@@ -254,7 +266,6 @@ class DatabaseSeeder extends Seeder
                 'user_id' => 2,
                 'additional_info' => 'Дополнительная информация',
                 'link' => 'https://google.com',
-                'item_id' => 3,
                 'is_offer' => 1,
                 'is_selling' => 0,
                 'is_archive' => 0
@@ -263,7 +274,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Предложение 2',
                 'type_id' => 2,
-                'inventory' => 'Цифровые билборды',
+                'inventory' => json_encode([1]),
                 'pay_format' => json_encode([1,2,4]),
                 'region_id' => 37,
                 'budget' => '300000',
@@ -273,7 +284,6 @@ class DatabaseSeeder extends Seeder
                 'user_id' => 2,
                 'additional_info' => 'Дополнительная информация',
                 'link' => 'https://google.com',
-                'item_id' => 3,
                 'is_offer' => 1,
                 'is_selling' => 0,
                 'is_archive' => 0
@@ -282,7 +292,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Предложение 3',
                 'type_id' => 2,
-                'inventory' => 'Цифровые билборды',
+                'inventory' => json_encode([5,7]),
                 'pay_format' => json_encode([1,2]),
                 'region_id' => 37,
                 'budget' => '200000',
@@ -292,7 +302,6 @@ class DatabaseSeeder extends Seeder
                 'user_id' => 2,
                 'additional_info' => 'Дополнительная информация',
                 'link' => 'https://google.com',
-                'item_id' => 3,
                 'is_offer' => 0,
                 'is_selling' => 1,
                 'is_archive' => 0
@@ -301,7 +310,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Предложение 4',
                 'type_id' => 2,
-                'inventory' => 'Цифровые билборды',
+                'inventory' => json_encode([2,4]),
                 'pay_format' => json_encode([1,2]),
                 'region_id' => 37,
                 'budget' => '600000',
@@ -311,7 +320,6 @@ class DatabaseSeeder extends Seeder
                 'user_id' => 2,
                 'additional_info' => 'Дополнительная информация',
                 'link' => 'https://google.com',
-                'item_id' => 3,
                 'is_offer' => 1,
                 'is_selling' => 1,
                 'is_archive' => 1
@@ -323,5 +331,27 @@ class DatabaseSeeder extends Seeder
             $ad['pay_format'] = json_encode([1,2]);
             Ad::create($ad);
         }
+
+        $adv = User::create([
+            'name' => 'Админ',
+            'email' => 'admin@email.net',
+            'password' => Hash::make('password'),
+            'role_id' => 3,
+            'phone' => '+7(777)777-55-44',
+            'subscribe_end' => now()->addYears(15)
+        ]);
+
+        Company::create([
+            'user_id'      => $adv->id,
+            'name'         => 'ООО Рога и Копыта',
+            'inn'          => '222',
+            'kpp'          => '222',
+            'ogrn'         => '222',
+            'fact_address' => 'Воронеж, проспект Революции, 2',
+            'ur_address'   => 'Москва, Красная Площадь 2',
+            'region_id'    => 37,
+            'site_url'     => 'https://yandex.ru',
+            'description'  => 'Описание'
+        ]);
     }
 }

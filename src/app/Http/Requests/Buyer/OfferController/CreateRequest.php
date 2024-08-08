@@ -24,7 +24,10 @@ class CreateRequest extends FormRequest
         return [
             'name' => 'required|string',
             'type_id' => 'required|exists:types,id',
-            'inventory' => 'required|string',
+
+            'inventory' => 'required|array',
+            'inventory.*' => 'required|exists:items,id',
+
             'pay_format' => 'required|array',
             'region_id' => 'required|exists:regions,id',
             'budget' => 'required|integer',
@@ -34,7 +37,6 @@ class CreateRequest extends FormRequest
             'additional_info' => 'required|string',
             'link' => 'required|url',
             'photo' => 'nullable|file',
-            'item_id' => 'required|exists:items,id',
             'is_selling' => 'required|in:0,1'
         ];
     }
@@ -49,7 +51,9 @@ class CreateRequest extends FormRequest
             'type_id.exists' => 'Указанного типа не существует',
 
             'inventory.required' => 'Выберите инвентарь',
-            'inventory.string' => 'Инвентарь должен быть строкой',
+            'inventory.array' => 'Инвентарь должен быть массивом',
+            'inventory.*.required' => 'Выберите товар или услугу',
+            'inventory.*.exists' => 'Указан неверный товар или услуга',
 
             'pay_format.required' => 'Укажите формат оплаты',
             'pay_format.string' => 'Формат оплаты должен быть строкой',
@@ -80,9 +84,6 @@ class CreateRequest extends FormRequest
 
             'photo.required' => 'Загрузите фото',
             'photo.file' => 'Фото должно быть файлом',
-
-            'item_id.required' => 'Укажите товар или услугу',
-            'item_id.exists' => 'Указан неверный товар или услуга',
 
             'is_selling.required' => 'Укажите тип объявления',
             'is_selling.in' => 'Указан неверный тип объявления'

@@ -23,7 +23,9 @@ class OfferService
         //Проверяем на уникальность!
         $adCheck = Ad::where('name', $data['name'])
             ->where('type_id', $data['type_id'])
-            ->where('inventory', $data['inventory'])
+            #TODO нужен тест
+            //->where('inventory', $data['inventory'])
+            ->whereJsonContains('inventory', json_decode($data['inventory']))
             ->whereJsonContains('pay_format', json_decode($data['pay_format']))
             ->where('region_id', $data['region_id'])
             ->where('budget', $data['budget'])

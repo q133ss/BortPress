@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('type_id')->constrained('types')->onDelete('cascade');
-            $table->string('inventory');
+            $table->json('inventory')->nullable();
             $table->json('pay_format');
             $table->foreignId('region_id')->constrained('regions')->onDelete('cascade');
             $table->unsignedBigInteger('budget');
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->text('additional_info');
             $table->string('link');
-            $table->foreignId('item_id')->nullable();
+//            $table->foreignId('items')->nullable();
             $table->boolean('is_offer');
             $table->boolean('is_selling')->default(1);
             $table->boolean('is_archive')->default(0);
