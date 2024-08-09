@@ -121,4 +121,22 @@ class User extends Authenticatable
 
         return now()->lessThan($subscribeEndDate);
     }
+
+    public function scopeWithSort($query, Request $request)
+    {
+        // Получаем поле для сортировки из запроса
+        $sortBy = $request->query('sort_by', 'name'); // 'name' - значение по умолчанию
+
+        // Определяем направление сортировки, по умолчанию 'asc' (по возрастанию)
+        $sortDirection = $request->query('sort_direction', 'asc');
+
+        // Проверяем, чтобы поле для сортировки было допустимым
+        if (in_array($sortBy, ['name', 'email', 'created_at'])) {
+            // Применяем сортировку
+            return $query->orderBy($sortBy, $sortDirection);
+        }
+
+        // Если поле недопустимо, можно вернуть запрос без сортировки или сортировать по умолчанию
+        return $query->orderBy('name', 'asc');
+    }
 }

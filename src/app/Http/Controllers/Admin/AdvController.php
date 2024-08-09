@@ -8,13 +8,15 @@ use Illuminate\Http\Request;
 
 class AdvController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         return User::where('role_id', function ($query){
             return $query->select('id')
                 ->from('roles')
                 ->where('slug','advertiser')
                 ->first();
-        })->get();
+        })
+            ->withSort($request)
+            ->get();
     }
 }

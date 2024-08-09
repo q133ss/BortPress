@@ -13,14 +13,17 @@ class PlatformController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        //Добавляем сортировку
         return User::where('role_id', function ($query){
             return $query->select('id')
                 ->from('roles')
                 ->where('slug','adv_platform')
                 ->first();
-        })->get();
+        })
+            ->withSort($request)
+            ->get();
     }
 
     /**

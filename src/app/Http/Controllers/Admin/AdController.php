@@ -101,6 +101,16 @@ class AdController extends Controller
         return (new OfferService())->update($id, $request, true);
     }
 
+    public function show($id)
+    {
+        $ad = Ad::findOrFail($id)->load('photo', 'document');
+
+        return Response()->json([
+            'ad' => $ad->item(),
+            'items' => $ad->item()
+        ]);
+    }
+
     public function users()
     {
         return User::orderBy('created_at', 'DESC')->get();
