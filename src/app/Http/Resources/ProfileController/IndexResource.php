@@ -25,7 +25,7 @@ class IndexResource extends JsonResource
                 'slug' => $this->role?->slug
             ],
             'phone' => $this->phone,
-            'company' => $this->company,
+            'company' => $this->company->load('logo', 'documents', 'region'),
             'subscribe_end' => $this->subscribe_end,
             'subscribe_status' => $this->subscribe_status()
         ];

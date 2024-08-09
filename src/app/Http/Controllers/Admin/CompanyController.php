@@ -75,7 +75,7 @@ class CompanyController extends Controller
      */
     public function show(string $id)
     {
-        return Company::findOrFail($id)->load('logo', 'documents', 'user');
+        return Company::findOrFail($id)->load('logo', 'documents', 'user', 'region');
     }
 
     /**

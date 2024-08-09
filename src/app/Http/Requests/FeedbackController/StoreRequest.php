@@ -24,7 +24,7 @@ class StoreRequest extends FormRequest
         return [
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|max:255',
-            'phone'    => 'required|string|unique:users,phone|regex:/^\+7\(\d{3}\)\d{3}-\d{2}-\d{2}$/'
+            'phone'    => 'required|string|regex:/^\+7\(\d{3}\)\d{3}-\d{2}-\d{2}$/'
         ];
     }
 

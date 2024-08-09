@@ -46,7 +46,7 @@ class PlatformController extends Controller
     {
         return User::with([
             'company' => function($query) {
-                $query->with('logo', 'documents');
+                $query->with('logo', 'documents', 'region');
             },
             'ads' => function ($query) use ($request) {
                 $query->withFilter($request);
