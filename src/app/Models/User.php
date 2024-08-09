@@ -139,4 +139,21 @@ class User extends Authenticatable
         // Если поле недопустимо, можно вернуть запрос без сортировки или сортировать по умолчанию
         return $query->orderBy('name', 'asc');
     }
+
+    public function activation_date()
+    {
+        // Дата активации юзера
+        $date = Payment::where('user_id', $this->id)
+            ->where('status', 'done')
+            ->orderBy('created_at', 'desc')
+            ->pluck('created_at')
+            ->first();
+
+        return Carbon::parse($date)->format('d-m-Y');
+    }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 }

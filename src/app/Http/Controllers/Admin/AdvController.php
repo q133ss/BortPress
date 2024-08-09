@@ -10,7 +10,7 @@ class AdvController extends Controller
 {
     public function index(Request $request)
     {
-        return User::where('role_id', function ($query){
+        $users = User::where('role_id', function ($query){
             return $query->select('id')
                 ->from('roles')
                 ->where('slug','advertiser')
@@ -18,5 +18,12 @@ class AdvController extends Controller
         })
             ->withSort($request)
             ->get();
+
+        $users->each(function ($user) {
+            $user->subscribe_status = $user->subscribe_status();
+            $user->activation_date = $user->activation_date();
+        });
+
+        return $users;
     }
 }

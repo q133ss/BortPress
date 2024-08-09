@@ -3,9 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Ad;
+use App\Models\Comment;
 use App\Models\Company;
 use App\Models\Item;
 use App\Models\ItemCategory;
+use App\Models\Payment;
 use App\Models\Region;
 use App\Models\Role;
 use App\Models\Tariff;
@@ -41,6 +43,14 @@ class DatabaseSeeder extends Seeder
             'role_id' => '1',
             'phone' => '+7(999)-999-99-00',
             'subscribe_end' => now()->addDays(30)
+        ]);
+
+        Payment::create([
+            'user_id' => $usr->id,
+            'sum' => 999,
+            'status' => 'done',
+            'description' => 'Оплата подписки',
+            'pay_id' => '312-654-32-545'
         ]);
 
         Company::create([
@@ -137,6 +147,14 @@ class DatabaseSeeder extends Seeder
             'subscribe_end' => now()->addDays(30)
         ]);
 
+        Payment::create([
+            'user_id' => $platform->id,
+            'sum' => 999,
+            'status' => 'done',
+            'description' => 'Оплата подписки',
+            'pay_id' => '312-654-32-545'
+        ]);
+
         Company::create([
             'user_id'      => $platform->id,
             'name'         => 'ООО Какие Люди',
@@ -157,6 +175,14 @@ class DatabaseSeeder extends Seeder
             'role_id' => 1,
             'phone' => '+7(111)222-33-33',
             'subscribe_end' => now()->addDays(30)
+        ]);
+
+        Payment::create([
+            'user_id' => $adv->id,
+            'sum' => 999,
+            'status' => 'done',
+            'description' => 'Оплата подписки',
+            'pay_id' => '312-654-32-545'
         ]);
 
         Company::create([
@@ -332,13 +358,42 @@ class DatabaseSeeder extends Seeder
             Ad::create($ad);
         }
 
-        $adv = User::create([
+        $admin = User::create([
             'name' => 'Админ',
             'email' => 'admin@email.net',
             'password' => Hash::make('password'),
             'role_id' => 3,
             'phone' => '+7(777)777-55-44',
             'subscribe_end' => now()->addYears(15)
+        ]);
+
+        Comment::create([
+            'user_id' => $admin->id,
+            'commentable_type' => 'App\Models\User',
+            'commentable_id' => $usr->id,
+            'comment' => 'Хороший продавец!'
+        ]);
+
+        Comment::create([
+            'user_id' => $admin->id,
+            'commentable_type' => 'App\Models\User',
+            'commentable_id' => $adv->id,
+            'comment' => 'Хороший продавец!!'
+        ]);
+
+        Comment::create([
+            'user_id' => $admin->id,
+            'commentable_type' => 'App\Models\User',
+            'commentable_id' => $adv->id,
+            'comment' => 'Не хороший продавец'
+        ]);
+
+        Payment::create([
+            'user_id' => $admin->id,
+            'sum' => 999,
+            'status' => 'done',
+            'description' => 'Оплата подписки',
+            'pay_id' => '312-654-32-545'
         ]);
 
         Company::create([

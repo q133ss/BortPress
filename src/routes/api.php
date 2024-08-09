@@ -72,6 +72,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', \App\Http\Middleware\IsAdmin
     Route::get('/adv', [\App\Http\Controllers\Admin\AdvController::class, 'index']);
     Route::get('/users', [\App\Http\Controllers\Admin\AdController::class, 'users']);
     Route::apiResource('ad', \App\Http\Controllers\Admin\AdController::class);
+    Route::post('/user/comment/{id}', [\App\Http\Controllers\Admin\CommentController::class, 'store']);
 });
 
 Route::post('/feedback', [\App\Http\Controllers\FeedbackController::class, 'store']);

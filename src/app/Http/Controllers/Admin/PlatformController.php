@@ -15,15 +15,21 @@ class PlatformController extends Controller
      */
     public function index(Request $request)
     {
-        //Добавляем сортировку
-        return User::where('role_id', function ($query){
+        $users = User::where('role_id', function ($query){
             return $query->select('id')
                 ->from('roles')
-                ->where('slug','adv_platform')
+                ->where('slug','advertiser')
                 ->first();
         })
             ->withSort($request)
             ->get();
+
+        $users->each(function ($user) {
+            $user->subscribe_status = $user->subscribe_status();
+            $user->activation_date = $user->activation_date();
+        });
+
+        return $users;
     }
 
     /**
@@ -38,9 +44,18 @@ class PlatformController extends Controller
      */
     public function show(Request $request,string $id)
     {
-        return User::with(['company','ads' => function ($query) use ($request) {
-            $query->withFilter($request);
-        },'archive'])->findOrFail($id);
+        return User::with([
+            'company' => function($query) {
+                $query->with('logo', 'documents');
+            },
+            'ads' => function ($query) use ($request) {
+                $query->withFilter($request);
+            },
+            'archive',
+            'comments' => function($query) {
+                $query->with('user');
+            }
+        ])->findOrFail($id);
     }
 
     /**
