@@ -23,6 +23,7 @@ class OfferController extends Controller
             //$ad->user = User::find($ad->user_id);
             $ad->inventory = Item::whereIn('id', $ad->inventory)->get();
             unset($ad->region_id);
+            unset($ad->getType);
             //unset($ad->user_id);
         });
         return $ads;
@@ -36,6 +37,7 @@ class OfferController extends Controller
         $ad->type = $ad->getType;
         $ad->inventory = Item::whereIn('id', $ad->inventory)->get();
         unset($ad->region_id);
+        unset($ad->getType);
         return $ad;
     }
 
@@ -58,6 +60,7 @@ class OfferController extends Controller
             //$ad->user = User::find($ad->user_id);
             $ad->inventory = Item::whereIn('id', $ad->inventory)->get();
             unset($ad->region_id);
+            unset($ad->getType);
             //unset($ad->user_id);
         });
 

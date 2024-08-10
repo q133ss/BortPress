@@ -21,6 +21,7 @@ class RequestController extends Controller
             //$ad->user = User::find($ad->user_id);
             $ad->inventory = Item::whereIn('id', $ad->inventory)->get();
             unset($ad->region_id);
+            unset($ad->getType);
             //unset($ad->user_id);
         });
         return $ads;
