@@ -6,6 +6,8 @@ use App\Http\Requests\ChatController\SendRequest;
 use App\Models\Ad;
 use App\Models\Chat;
 use App\Models\Message;
+use App\Models\Role;
+use App\Models\User;
 use Pusher\Pusher;
 
 class ChatService
@@ -16,6 +18,12 @@ class ChatService
 
         $userId = $ad->user_id;
         $currentUserId = Auth()->id();
+
+        if(Auth('sanctum')->user()->role_id == Role::where('slug', 'advertiser')->pluck('id')->first()
+            && User::find($userId)->role_id == Role::where('slug', 'advertiser')->pluck('id')->first())
+        {
+            abort(403, 'Вам не доступно создание чата');
+        }
 
         if($userId == $currentUserId){
             return Response()->json(['message' => 'Нельзя создать чат с самим собой', 'errors' => ['error' => 'Нельзя создать чат с самим собой']], 422);

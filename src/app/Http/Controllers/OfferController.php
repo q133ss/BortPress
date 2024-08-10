@@ -6,6 +6,7 @@ use App\Models\Ad;
 use App\Models\Item;
 use App\Models\PayFormat;
 use App\Models\Region;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,6 @@ class OfferController extends Controller
         $ads->each(function ($ad) {
             $ad->pay_format = PayFormat::whereIn('id', $ad->pay_format)->get();
             $ad->region = Region::find($ad->region_id);
-            $ad->item = Item::find($ad->item);
             //$ad->user = User::find($ad->user_id);
             $ad->inventory = Item::whereIn('id', $ad->inventory)->get();
             unset($ad->region_id);
@@ -67,6 +67,11 @@ class OfferController extends Controller
     {
         $owner = Ad::findOrFail($id)
             ->owner;
+
+        if(Auth('sanctum')->user()->role_id == Role::where('slug', 'advertiser')->pluck('id')->first())
+        {
+            abort(403, 'Вам не доступен просмотр номера');
+        }
 
         return Response()->json([
             'phone' => $owner->phone,
