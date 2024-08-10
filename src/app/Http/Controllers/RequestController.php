@@ -17,6 +17,7 @@ class RequestController extends Controller
         $ads->each(function ($ad) {
             $ad->pay_format = PayFormat::whereIn('id', $ad->pay_format)->get();
             $ad->region = Region::find($ad->region_id);
+            $ad->type = $ad->getType;
             //$ad->user = User::find($ad->user_id);
             $ad->inventory = Item::whereIn('id', $ad->inventory)->get();
             unset($ad->region_id);

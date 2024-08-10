@@ -19,6 +19,7 @@ class OfferController extends Controller
         $ads->each(function ($ad) {
             $ad->pay_format = PayFormat::whereIn('id', $ad->pay_format)->get();
             $ad->region = Region::find($ad->region_id);
+            $ad->type = $ad->getType;
             //$ad->user = User::find($ad->user_id);
             $ad->inventory = Item::whereIn('id', $ad->inventory)->get();
             unset($ad->region_id);
@@ -32,7 +33,7 @@ class OfferController extends Controller
         $ad =  Ad::findOrFail($id)->load('photo', 'document');
         $ad->pay_format = PayFormat::whereIn('id', $ad->pay_format)->get();
         $ad->region = Region::find($ad->region_id);
-        $ad->item = Item::find($ad->item);
+        $ad->type = $ad->getType;
         $ad->inventory = Item::whereIn('id', $ad->inventory)->get();
         unset($ad->region_id);
         return $ad;
@@ -53,7 +54,7 @@ class OfferController extends Controller
         $ads->each(function ($ad) {
             $ad->pay_format = PayFormat::whereIn('id', $ad->pay_format)->get();
             $ad->region = Region::find($ad->region_id);
-            //$ad->item = Item::find($ad->item);
+            $ad->type = $ad->getType;
             //$ad->user = User::find($ad->user_id);
             $ad->inventory = Item::whereIn('id', $ad->inventory)->get();
             unset($ad->region_id);

@@ -182,4 +182,9 @@ class Ad extends Model
 
         return \App\Models\Item::whereIn('id', $inventoryIds)->get();
     }
+
+    public function getType()
+    {
+        return $this->hasOne(Type::class, 'id', 'type_id');
+    }
 }
