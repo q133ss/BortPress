@@ -23,6 +23,7 @@ class OfferController extends Controller
         return Ad::withFilter($request)->where('user_id', Auth('sanctum')->id())
             ->where('is_offer', false)
             ->where('is_archive', true)
+            ->with('region')
             ->get();
     }
     public function create(CreateRequest $request)

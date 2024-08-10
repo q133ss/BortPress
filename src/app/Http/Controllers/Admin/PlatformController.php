@@ -4,6 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileController\UpdateRequest;
+use App\Models\Item;
+use App\Models\PayFormat;
+use App\Models\Payment;
+use App\Models\Region;
+use App\Models\Role;
 use App\Models\User;
 use App\Services\ProfileService;
 use Illuminate\Http\Request;
@@ -18,7 +23,7 @@ class PlatformController extends Controller
         $users = User::where('role_id', function ($query){
             return $query->select('id')
                 ->from('roles')
-                ->where('slug','advertiser')
+                ->where('slug','adv_platform')
                 ->first();
         })
             ->withSort($request)
@@ -27,6 +32,7 @@ class PlatformController extends Controller
         $users->each(function ($user) {
             $user->subscribe_status = $user->subscribe_status();
             $user->activation_date = $user->activation_date();
+            $user->purchase_amount = Payment::where('status', 'done')->pluck('sum')->sum();
         });
 
         return $users;
@@ -44,18 +50,33 @@ class PlatformController extends Controller
      */
     public function show(Request $request,string $id)
     {
-        return User::with([
+        $user = User::findOrFail($id);
+        $data =
+        [
             'company' => function($query) {
                 $query->with('logo', 'documents', 'region');
             },
             'ads' => function ($query) use ($request) {
+                $query->with('region');
+                //$query->inventory = $query->item();
+                //$query->type = $query->getType;
                 $query->withFilter($request);
             },
-            'archive',
+            'archive' => function($query) {
+                $query->with('region');
+            },
+            'role',
             'comments' => function($query) {
                 $query->with('user');
             }
-        ])->findOrFail($id);
+        ];
+
+        if($user->role_id == Role::where('slug', 'advertiser')->pluck('id')->first())
+        {
+            unset($data['comments']);
+        }
+
+        return $user->load($data);
     }
 
     /**

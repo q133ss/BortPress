@@ -18,7 +18,7 @@ class Ad extends Model
         'inventory' => 'array',
     ];
 
-    public function getPayFormatAttribute($value)
+    public function __getPayFormatAttribute($value)
     {
         // Проверяем, является ли значение валидным JSON
         if ($this->isJson($value)) {
@@ -35,7 +35,7 @@ class Ad extends Model
         return $value;
     }
 
-    public function getInventoryAttribute($value)
+    public function __getInventoryAttribute($value)
     {
         // Проверяем, является ли значение валидным JSON
         if ($this->isJson($value)) {
@@ -92,7 +92,7 @@ class Ad extends Model
     {
         return $query
             ->when(
-            $request->query('type_id'),
+                $request->query('type_id'),
                 function (Builder $query, $type_id) {
                     return $query->where('type_id', $type_id);
                 }
@@ -169,12 +169,6 @@ class Ad extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-//    public function item()
-//    {
-//        return $this->hasMany(Item::class, 'id', 'inventory')
-//            ->whereIn('id', $this->inventory);
-//    }
-
     public function item()
     {
         // Обработка случая, когда inventory может быть null
@@ -186,5 +180,57 @@ class Ad extends Model
     public function getType()
     {
         return $this->hasOne(Type::class, 'id', 'type_id');
+    }
+
+    public function region()
+    {
+        return $this->hasOne(Region::class, 'id', 'region_id');
+    }
+
+    public function getTypeIdAttribute($value)
+    {
+        return Type::find($value);
+    }
+
+    public function getInventoryAttribute($value)
+    {
+        $inventoryIds = json_decode($value) ?? [];
+
+        return Item::whereIn('id', $inventoryIds)->get();
+    }
+
+    public function getPayFormatAttribute($value)
+    {
+        $payFormatIds = json_decode($value) ?? [];
+        return PayFormat::whereIn('id', $payFormatIds)->get();
+    }
+
+    public function getRegionIdAttribute($value)
+    {
+        return Region::find($value);
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'type' => $this->type_id->toArray(),
+            'inventory' => $this->inventory->toArray(),
+            'pay_format' => $this->pay_format,
+            'region' => $this->region_id,
+            'budget' => $this->budget,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date,
+            'is_unique' => $this->is_unique,
+            'user_id' => $this->user_id,
+            'additional_info' => $this->additional_info,
+            'link' => $this->link,
+            'is_offer' => $this->is_offer,
+            'is_selling' => $this->is_selling,
+            'is_archive' => $this->is_archive,
+            'created_at' => $this->created_at->toIso8601String(),
+            'updated_at' => $this->updated_at->toIso8601String()
+        ];
     }
 }

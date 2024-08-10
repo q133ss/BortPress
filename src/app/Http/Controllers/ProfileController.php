@@ -22,6 +22,6 @@ class ProfileController extends Controller
 
     public function archive(Request $request)
     {
-        return Ad::where('user_id', Auth()->id())->where('is_archive', 1)->withFilter($request)->get();
+        return Ad::where('user_id', Auth()->id())->where('is_archive', 1)->with('region')->withFilter($request)->get();
     }
 }
