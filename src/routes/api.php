@@ -18,6 +18,8 @@ Route::get('/types', [App\Http\Controllers\TypeController::class, 'index']);
 Route::get('/regions', [\App\Http\Controllers\RegionController::class, 'index']);
 Route::get('/pay-formats', [App\Http\Controllers\PayFormatController::class, 'index']);
 
+Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index']);
+
 // Уникальные предложения
 Route::get('/index/unique', [\App\Http\Controllers\IndexController::class, 'uniques']);
 Route::get('/index/catalog/{type}', [\App\Http\Controllers\IndexController::class, 'catalog']);
@@ -73,6 +75,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', \App\Http\Middleware\IsAdmin
     Route::get('/users', [\App\Http\Controllers\Admin\AdController::class, 'users']);
     Route::apiResource('ad', \App\Http\Controllers\Admin\AdController::class);
     Route::post('/user/comment/{id}', [\App\Http\Controllers\Admin\CommentController::class, 'store']);
+    Route::get('/comments/{id}', [\App\Http\Controllers\Admin\CommentController::class, 'getById']);
 });
 
 Route::post('/feedback', [\App\Http\Controllers\FeedbackController::class, 'store']);

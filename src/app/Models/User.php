@@ -156,4 +156,9 @@ class User extends Authenticatable
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id','id')->orderBy('created_at', 'desc');
+    }
 }

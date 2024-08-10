@@ -7,6 +7,7 @@ use App\Models\Comment;
 use App\Models\Company;
 use App\Models\Item;
 use App\Models\ItemCategory;
+use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\Region;
 use App\Models\Role;
@@ -374,6 +375,20 @@ class DatabaseSeeder extends Seeder
             'comment' => 'Хороший продавец!'
         ]);
 
+        Notification::create([
+            'title' => 'Уведомление!',
+            'text' => 'Текст уведомления',
+            'link' => 'https://yandex.ru',
+            'user_id' => $admin->id
+        ]);
+
+        Notification::create([
+            'title' => 'Уведомление!',
+            'text' => 'Текст уведомления',
+            'link' => 'https://yandex.ru',
+            'user_id' => $usr->id
+        ]);
+
         Comment::create([
             'user_id' => $admin->id,
             'commentable_type' => 'App\Models\User',
@@ -386,6 +401,13 @@ class DatabaseSeeder extends Seeder
             'commentable_type' => 'App\Models\User',
             'commentable_id' => $adv->id,
             'comment' => 'Не хороший продавец'
+        ]);
+
+        Notification::create([
+            'title' => 'Уведомление!',
+            'text' => 'Текст уведомления',
+            'link' => 'https://yandex.ru',
+            'user_id' => $adv->id
         ]);
 
         Payment::create([
