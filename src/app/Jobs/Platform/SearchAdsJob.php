@@ -3,6 +3,7 @@
 namespace App\Jobs\Platform;
 
 use App\Models\Ad;
+use App\Models\NotificationCategory;
 use App\Services\NotificationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -49,7 +50,11 @@ class SearchAdsJob implements ShouldQueue
             "&end_date=".$this->ad->end_date.
             "&region_id=".$this->ad->region_id;
 
-            (new NotificationService())->create($title, $text, [$this->ad->user_id], $link);
+            $category_id = NotificationCategory::where('name', 'Новое совпадение')
+                ->pluck('id')
+                ->first();
+
+            (new NotificationService())->create($title, $text, [$this->ad->user_id], $category_id, $link);
         }
     }
 }

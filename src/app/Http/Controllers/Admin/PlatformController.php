@@ -33,6 +33,7 @@ class PlatformController extends Controller
             $user->subscribe_status = $user->subscribe_status();
             $user->activation_date = $user->activation_date();
             $user->purchase_amount = Payment::where('status', 'done')->pluck('sum')->sum();
+            $user->load('company');
         });
 
         return $users;

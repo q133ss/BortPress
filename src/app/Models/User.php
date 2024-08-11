@@ -149,7 +149,7 @@ class User extends Authenticatable
             ->pluck('created_at')
             ->first();
 
-        return Carbon::parse($date)->format('d-m-Y');
+        return $date;
     }
 
     public function comments()

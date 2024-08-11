@@ -3,12 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-# TODO
-
-// Админка
-
-# / TODO
-
 Route::get('/roles', [App\Http\Controllers\RoleController::class, 'roles']);
 Route::get('/roles/all', [App\Http\Controllers\RoleController::class, 'all']);
 Route::post('/register', [App\Http\Controllers\RegisterController::class, 'register']);
@@ -17,8 +11,6 @@ Route::post('/login', [App\Http\Controllers\LoginController::class, 'login']);
 Route::get('/types', [App\Http\Controllers\TypeController::class, 'index']);
 Route::get('/regions', [\App\Http\Controllers\RegionController::class, 'index']);
 Route::get('/pay-formats', [App\Http\Controllers\PayFormatController::class, 'index']);
-
-Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index']);
 
 // Уникальные предложения
 Route::get('/index/unique', [\App\Http\Controllers\IndexController::class, 'uniques']);
@@ -37,6 +29,10 @@ Route::group(['middleware' => ['auth:sanctum','blockCheck']],function (){
 
     Route::get('/me', [App\Http\Controllers\ProfileController::class, 'index']);
     Route::post('/me', [App\Http\Controllers\ProfileController::class, 'update']);
+
+    Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index']);
+    Route::get('/notifications/clear', [\App\Http\Controllers\NotificationController::class, 'clear']);
+    Route::get('/notifications/category/clear/{id}', [\App\Http\Controllers\NotificationController::class, 'clearCategory']);
 
     Route::get('/profile/archive', [App\Http\Controllers\ProfileController::class, 'archive']);
 

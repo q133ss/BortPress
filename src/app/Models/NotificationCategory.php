@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Notification extends Model
+class NotificationCategory extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    protected $hidden = ['text'];
 
-    public function category()
+    public function notifications()
     {
-        return $this->hasOne(NotificationCategory::class, 'id', 'category_id');
+        return $this->hasMany(Notification::class, 'category_id', 'id');
     }
 }

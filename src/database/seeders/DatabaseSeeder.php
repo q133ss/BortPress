@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\Item;
 use App\Models\ItemCategory;
 use App\Models\Notification;
+use App\Models\NotificationCategory;
 use App\Models\Payment;
 use App\Models\Region;
 use App\Models\Role;
@@ -42,7 +43,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'user@email.net',
             'password' => Hash::make('password'),
             'role_id' => '1',
-            'phone' => '+7(999)-999-99-00',
+            'phone' => '+7(999)999-99-00',
             'subscribe_end' => now()->addDays(30)
         ]);
 
@@ -375,18 +376,36 @@ class DatabaseSeeder extends Seeder
             'comment' => 'Хороший продавец!'
         ]);
 
-        Notification::create([
-            'title' => 'Уведомление!',
-            'text' => 'Текст уведомления',
-            'link' => 'https://yandex.ru',
-            'user_id' => $admin->id
+        $notificationCategory = NotificationCategory::create([
+            'name' => 'Название категории'
+        ]);
+
+        $notificationCategoryTwo = NotificationCategory::create([
+            'name' => 'Новое совпадение'
         ]);
 
         Notification::create([
             'title' => 'Уведомление!',
             'text' => 'Текст уведомления',
             'link' => 'https://yandex.ru',
-            'user_id' => $usr->id
+            'user_id' => $admin->id,
+            'category_id' => 1
+        ]);
+
+        Notification::create([
+            'title' => 'Уведомление!',
+            'text' => 'Текст уведомления',
+            'link' => 'https://yandex.ru',
+            'user_id' => $usr->id,
+            'category_id' => 1
+        ]);
+
+        Notification::create([
+            'title' => 'Новое совпадение',
+            'text' => 'Найдено совпадение!',
+            'link' => 'https://yandex.ru',
+            'user_id' => $usr->id,
+            'category_id' => 2
         ]);
 
         Comment::create([
@@ -407,7 +426,8 @@ class DatabaseSeeder extends Seeder
             'title' => 'Уведомление!',
             'text' => 'Текст уведомления',
             'link' => 'https://yandex.ru',
-            'user_id' => $adv->id
+            'user_id' => $adv->id,
+            'category_id' => 1
         ]);
 
         Payment::create([

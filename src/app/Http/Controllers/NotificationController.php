@@ -11,4 +11,14 @@ class NotificationController extends Controller
     {
         return (new NotificationService())->index();
     }
+
+    public function clear()
+    {
+        return (new NotificationService())->clear();
+    }
+
+    public function clearCategory($id)
+    {
+        return (new NotificationService())->clearCategory($id);
+    }
 }
