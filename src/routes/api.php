@@ -38,6 +38,8 @@ Route::group(['middleware' => ['auth:sanctum','blockCheck']],function (){
 
     Route::get('/show/phone/{ad_id}', [\App\Http\Controllers\OfferController::class, 'showPhone']);
 
+    Route::post('/item', [\App\Http\Controllers\ItemController::class, 'store']);
+
     // ЛК Продавца
     Route::group(['prefix' => 'platform'],function (){
         Route::post('/offer', [App\Http\Controllers\Platform\OfferController::class, 'create']);

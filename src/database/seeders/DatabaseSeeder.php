@@ -69,15 +69,31 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $formats = [
-            'cash' => 'Денежные средства',
-            'barter' => 'Бартер',
-            'trade' => 'Обмен рекламным трафиком',
-            'sliv' => 'Слив'
+            [
+                'slug' => 'cash',
+                'name' => 'Денежные средства',
+                'is_offer' => false
+            ],
+            [
+                'slug' => 'barter',
+                'name' => 'Бартер',
+                'is_offer' => false
+            ],
+            [
+                'slug' => 'trade',
+                'name' => 'Обмен рекламным трафиком',
+                'is_offer' => true
+            ],
+            [
+                'slug' => 'sliv',
+                'name' => 'Слив',
+                'is_offer' => true
+            ]
         ];
 
-        foreach ($formats as $slug => $name) {
+        foreach ($formats as $format) {
             DB::table('pay_formats')
-                ->insert(['slug' => $slug, 'name' => $name]);
+                ->insert($format);
         }
 
         $types = [

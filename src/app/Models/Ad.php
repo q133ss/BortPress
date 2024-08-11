@@ -125,12 +125,6 @@ class Ad extends Model
                     });
                 }
             )
-            //            ->when(
-//                $request->query('pay_format'),
-//                function (Builder $query, $pay_format) {
-//                    return $query->whereJsonContains('pay_format', $pay_format);
-//                }
-//            )
             ->when(
                 $request->query('budget_from'),
                 function (Builder $query, $budget_from) {

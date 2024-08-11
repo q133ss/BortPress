@@ -45,7 +45,13 @@ class ChatService
             ]);
         }
 
-        return $chat;
+        return $chat->load(['receiver' => function ($query) {
+            $query->select('id', 'name')
+            ->with(['company' => function ($query) {
+                $query->select('id', 'user_id', 'name');
+                $query->with('logo');
+            }]);
+        }]);
     }
 
     public function messages(int $chat_id)
