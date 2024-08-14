@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\ProfileController;
 
+use App\Models\Role;
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -22,6 +24,12 @@ class UpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $isAdv = false;
+        if(Auth()->user()->role_id == Role::where('slug', 'advertiser')->pluck('id')->first())
+        {
+            $isAdv = true;
+        }
+
         return [
             'name' => 'required|string|max:255',
             'email' => [
@@ -49,7 +57,9 @@ class UpdateRequest extends FormRequest
             'ur_address' => 'nullable|string|max:255',
             'region_id' => 'nullable|exists:regions,id',
             'site_url' => 'nullable|url',
-            'description' => 'nullable|string'
+            'description' => 'nullable|string',
+            'types' => 'nullable|array',
+            'types.*' => ['exists:types,id']
         ];
     }
 
@@ -112,6 +122,9 @@ class UpdateRequest extends FormRequest
 
             'description.nullable' => 'Описание не обязательно к заполнению',
             'description.string' => 'Описание должно быть строкой',
+
+            'types.array' => 'Формат рекламы должен быть массивом',
+            'types.*.exists' => 'Указанного формата рекламы не существует'
         ];
     }
 }

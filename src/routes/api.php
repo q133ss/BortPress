@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth:sanctum','blockCheck']],function (){
 
     Route::get('/me', [App\Http\Controllers\ProfileController::class, 'index']);
     Route::post('/me', [App\Http\Controllers\ProfileController::class, 'update']);
+    Route::post('/document', [\App\Http\Controllers\ProfileController::class, 'document']);
 
     Route::get('/user/{id}', [\App\Http\Controllers\UserController::class, 'show']);
 

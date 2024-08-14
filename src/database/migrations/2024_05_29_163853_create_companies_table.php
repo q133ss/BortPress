@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('fact_address');
             $table->string('ur_address');
             $table->foreignId('region_id');
+            $table->json('types');
             $table->string('site_url');
             $table->text('description');
             $table->timestamps();

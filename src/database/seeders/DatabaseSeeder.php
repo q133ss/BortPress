@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->command->alert('Начинаю Seed');
+
         $roles = [
             'Рекламодатель' => 'advertiser',
             'Рекламная площадка' => 'adv_platform',
@@ -64,6 +66,7 @@ class DatabaseSeeder extends Seeder
             'fact_address' => "Воронеж, Ленина, 1",
             'ur_address' => "Воронеж, Ленина, 2",
             'region_id' => 37,
+            'types' => [1,2],
             'site_url' => "https://google.com",
             'description' => "Описание компании",
         ]);
@@ -179,6 +182,7 @@ class DatabaseSeeder extends Seeder
             'inn'          => '111',
             'kpp'          => '111',
             'ogrn'         => '111',
+            'types' => [1,2],
             'fact_address' => 'Воронеж, проспект Революции, 1',
             'ur_address'   => 'Москва, Красная Площадь 1',
             'region_id'    => 37,
@@ -209,6 +213,7 @@ class DatabaseSeeder extends Seeder
             'inn'          => '222',
             'kpp'          => '222',
             'ogrn'         => '222',
+            'types' => [1,2],
             'fact_address' => 'Воронеж, проспект Революции, 2',
             'ur_address'   => 'Москва, Красная Площадь 2',
             'region_id'    => 37,
@@ -460,11 +465,14 @@ class DatabaseSeeder extends Seeder
             'inn'          => '222',
             'kpp'          => '222',
             'ogrn'         => '222',
+            'types' => [1,2],
             'fact_address' => 'Воронеж, проспект Революции, 2',
             'ur_address'   => 'Москва, Красная Площадь 2',
             'region_id'    => 37,
             'site_url'     => 'https://yandex.ru',
             'description'  => 'Описание'
         ]);
+
+        $this->command->alert('Seed завершен');
     }
 }

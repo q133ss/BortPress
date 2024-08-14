@@ -48,7 +48,8 @@ class ProfileService
                     'ur_address' => $request->ur_address,
                     'region_id' => $request->region_id,
                     'site_url' => $request->site_url,
-                    'description' => $request->description
+                    'description' => $request->description,
+                    'types' => $request->types
                 ]);
             } else {
                 $company->update([
@@ -60,7 +61,8 @@ class ProfileService
                     'ur_address' => $request->ur_address,
                     'region_id' => $request->region_id,
                     'site_url' => $request->site_url,
-                    'description' => $request->description
+                    'description' => $request->description,
+                    'types' => $request->types
                 ]);
             }
 
@@ -136,5 +138,34 @@ class ProfileService
         }
 
         return $company->load('documents', 'logo');
+    }
+
+    public function document($request)
+    {
+        $user = Auth()->user();
+        $company = $user->company;
+
+        if ($request->hasFile('documents')) {
+            $oldFile = File::where('fileable_id', $company->id)
+                ->where('fileable_type', 'App\Models\Company')
+                ->where('category', 'documents');
+
+            if ($oldFile->exists()) {
+                Storage::disk('public')->delete(str_replace(env('APP_URL').'/storage/', '', $oldFile->pluck('src')->first()));
+                $oldFile->delete();
+            }
+
+            File::create([
+                'fileable_id' => $company->id,
+                'fileable_type' => 'App\Models\Company',
+                'category' => 'documents',
+                'src' => env('APP_URL') . '/storage/' . $request->file('documents')->store('documents', 'public')
+            ]);
+        }
+
+        return Response()->json([
+            'status' => 'true',
+            'company' => $company->load('documents', 'logo')
+        ]);
     }
 }

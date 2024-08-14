@@ -10,6 +10,10 @@ class Company extends Model
     use HasFactory;
     protected $guarded = [];
 
+    protected $casts = [
+        'types' => 'array'
+    ];
+
     public function documents(): \Illuminate\Database\Eloquent\Relations\MorphOne
     {
         return $this->morphOne(File::class, 'fileable')->where('category', 'documents');
@@ -28,5 +32,10 @@ class Company extends Model
     public function user()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    public function formats()
+    {
+        return Type::whereIn('id', $this->types)->get();
     }
 }

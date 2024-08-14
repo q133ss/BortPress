@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProfileController\DocumentRequest;
 use App\Http\Requests\ProfileController\LogoUpdateRequest;
 use App\Http\Requests\ProfileController\UpdateRequest;
 use App\Http\Resources\ProfileController\IndexResource;
@@ -29,5 +30,10 @@ class ProfileController extends Controller
     public function logoUpdate(LogoUpdateRequest $request)
     {
         return (new ProfileService())->logoUpdate($request);
+    }
+
+    public function document(DocumentRequest $request)
+    {
+        return (new ProfileService())->document($request);
     }
 }
