@@ -8,20 +8,22 @@ class NotificationService
 {
     public function index()
     {
-//        return Auth('sanctum')->user()->notifications->groupBy(function ($item){
-//            return $item->category->name ?? '---';
-//        });
-
         $groupedNotifications = Auth('sanctum')->user()->notifications->groupBy(function ($item) {
-            return $item->category->name ?? '---';
-        })->map(function ($items, $category) {
+            return $item->category_id ?? '---';
+        })->mapWithKeys(function ($items, $categoryId) {
+            $categoryName = $items->first()->category->name ?? '---';
+
             return [
-                'last_notifications_date' => $items->max('created_at'),
-                'notifications' => $items,
+                $categoryName => [
+                    'last_notifications_date' => $items->max('created_at'),
+                    'category_id' => $categoryId,
+                    'notifications' => $items,
+                ],
             ];
         });
 
         return $groupedNotifications;
+
     }
     public function create(string $title, string $text, array $user_id, $category_id, $link = null): true
     {

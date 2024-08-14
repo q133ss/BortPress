@@ -30,6 +30,8 @@ Route::group(['middleware' => ['auth:sanctum','blockCheck']],function (){
     Route::get('/me', [App\Http\Controllers\ProfileController::class, 'index']);
     Route::post('/me', [App\Http\Controllers\ProfileController::class, 'update']);
 
+    Route::post('/update/company/logo', [\App\Http\Controllers\ProfileController::class, 'logoUpdate']);
+
     Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index']);
     Route::get('/notifications/clear', [\App\Http\Controllers\NotificationController::class, 'clear']);
     Route::get('/notifications/category/clear/{id}', [\App\Http\Controllers\NotificationController::class, 'clearCategory']);

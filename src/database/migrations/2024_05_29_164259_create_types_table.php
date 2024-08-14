@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('parent_id')->nullable();
+            $table->string('slug')->unique();
             $table->foreign('parent_id')->references('id')->on('types')->onDelete('cascade');
             $table->timestamps();
         });

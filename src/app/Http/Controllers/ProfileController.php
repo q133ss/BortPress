@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProfileController\LogoUpdateRequest;
 use App\Http\Requests\ProfileController\UpdateRequest;
 use App\Http\Resources\ProfileController\IndexResource;
 use App\Models\Ad;
@@ -23,5 +24,10 @@ class ProfileController extends Controller
     public function archive(Request $request)
     {
         return Ad::where('user_id', Auth()->id())->where('is_archive', 1)->with('region')->withFilter($request)->get();
+    }
+
+    public function logoUpdate(LogoUpdateRequest $request)
+    {
+        return (new ProfileService())->logoUpdate($request);
     }
 }

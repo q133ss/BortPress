@@ -111,4 +111,30 @@ class ProfileService
             'company' => $company->load('documents', 'logo')
         ]);
     }
+
+    public function logoUpdate($request)
+    {
+        $company = Company::where('user_id', Auth('sanctum')->id())
+            ->first();
+
+        if ($request->hasFile('logo')) {
+            $oldLogo = File::where('fileable_id', $company->id)
+                ->where('fileable_type', 'App\Models\Company')
+                ->where('category', 'logo');
+
+            if ($oldLogo->exists()) {
+                Storage::disk('public')->delete(str_replace(env('APP_URL').'/storage/', '', $oldLogo->pluck('src')->first()));
+                $oldLogo->delete();
+            }
+
+            File::create([
+                'fileable_id' => $company->id,
+                'fileable_type' => 'App\Models\Company',
+                'category' => 'logo',
+                'src' => env('APP_URL') . '/storage/' . $request->file('logo')->store('logo', 'public')
+            ]);
+        }
+
+        return $company->load('documents', 'logo');
+    }
 }
