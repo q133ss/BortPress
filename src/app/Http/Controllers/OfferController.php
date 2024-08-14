@@ -47,7 +47,13 @@ class OfferController extends Controller
         $owner = Ad::findOrFail($id)
             ->owner;
 
-        if(Auth('sanctum')->user()->role_id == Role::where('slug', 'advertiser')->pluck('id')->first())
+        $adv_role_id = Role::where('slug', 'advertiser')->pluck('id')->first();
+
+        if(
+            Auth('sanctum')->user()->role_id == $adv_role_id
+            &&
+            $owner->role_id == $adv_role_id
+        )
         {
             abort(403, 'Вам не доступен просмотр номера');
         }
