@@ -15,10 +15,12 @@ class TypeService
                 return [
                     'id'     => $parent->id,
                     'name'   => $parent->name,
+                    'slug'   => $parent->slug,
                     'childs' => $parent->children->map(function ($child) use ($parent) {
                         return [
                             'id'        => $child->id,
                             'name'      => $child->name,
+                            'slug'      => $child->slug,
                             'parent_id' => $parent->id
                         ];
                     })->all()
