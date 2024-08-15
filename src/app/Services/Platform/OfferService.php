@@ -6,6 +6,7 @@ use App\Http\Requests\Platform\OfferController\CreateRequest;
 use App\Jobs\Platform\SearchAdsJob;
 use App\Models\Ad;
 use App\Models\File;
+use App\Models\PayFormat;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -18,6 +19,11 @@ class OfferService
 
         unset($data['document']);
         unset($data['photo']);
+
+        unset($data['cost_by_price']);
+        unset($data['discount_cost']);
+        unset($data['possibility_of_extension']);
+
         $data['pay_format'] = json_encode($request->pay_format);
 
         //Проверяем на уникальность!
@@ -25,7 +31,7 @@ class OfferService
             ->where('type_id', $data['type_id'])
             #TODO нужен тест
             //->where('inventory', $data['inventory'])
-            ->whereJsonContains('inventory', json_decode($data['inventory']))
+            ->whereJsonContains('inventory', $data['inventory'])
             ->whereJsonContains('pay_format', json_decode($data['pay_format']))
             ->where('region_id', $data['region_id'])
             ->where('budget', $data['budget'])
@@ -85,8 +91,7 @@ class OfferService
 
         return Response()->json([
             'message' => 'true',
-            'ad' => $ad->load('photo', 'document'),
-            'items' => $ad->item()
+            'ad' => $ad->load('photo', 'document')
         ], 201);
     }
 
@@ -101,6 +106,29 @@ class OfferService
 
         unset($data['document']);
         unset($data['photo']);
+
+        $sliv_id = PayFormat::where('slug', 'sliv')->pluck('id')->first();
+
+        $payFormats = $ad->getAttribute('pay_format')->pluck('id')->all();
+        if(!in_array($sliv_id, $payFormats))
+        {
+            unset($data['cost_by_price']);
+            unset($data['discount_cost']);
+            unset($data['possibility_of_extension']);
+        }else{
+            $request->validate(
+                [
+                    'cost_by_price' => 'required',
+                    'discount_cost' => 'required',
+                    'possibility_of_extension' => 'required'
+                ],
+                [
+                    'cost_by_price.required' => 'Поле "Цена по прайсу" обязательно для заполнения.',
+                    'discount_cost.required' => 'Поле "Цена со скидкой" обязательно для заполнения.',
+                    'possibility_of_extension.required' => 'Поле "Возможность продления" обязательно для заполнения.',
+                ]
+            );
+        }
 
         $data['pay_format'] = json_encode($request->pay_format);
 
@@ -183,7 +211,7 @@ class OfferService
 
         return Response()->json([
             'message' => 'true',
-            'ad' => $ad->load('photo', 'document', 'item')
+            'ad' => $ad->load('photo', 'document') //item
         ], 200);
     }
 

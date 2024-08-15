@@ -34,7 +34,11 @@ class CreateRequest extends FormRequest
             'end_date' => 'required|date_format:Y-m-d|after:start_date',
             'additional_info' => 'required|string',
             'link' => 'required|url',
-            'photo' => 'nullable|file'
+            'photo' => 'nullable|file',
+
+            'cost_by_price' => 'nullable|numeric',
+            'discount_cost' => 'nullable|numeric',
+            'possibility_of_extension' => 'nullable|boolean'
         ];
     }
 
@@ -81,7 +85,11 @@ class CreateRequest extends FormRequest
             'link.url' => 'Неверный формат ссылки',
 
             'photo.required' => 'Загрузите фото',
-            'photo.file' => 'Фото должно быть файлом'
+            'photo.file' => 'Фото должно быть файлом',
+
+            'cost_by_price.numeric' => 'Цена по прайсу должна быть числом',
+            'discount_cost.numeric' => 'Цена со скидкой должна быть числом',
+            'possibility_of_extension.boolean' => 'Возможность продления должно быть 1 или 0'
         ];
     }
 }

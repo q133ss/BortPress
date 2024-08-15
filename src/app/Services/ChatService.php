@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Requests\ChatController\SendRequest;
 use App\Models\Ad;
 use App\Models\Chat;
+use App\Models\File;
 use App\Models\Message;
 use App\Models\Role;
 use App\Models\User;
@@ -45,20 +46,26 @@ class ChatService
             ]);
         }
 
-        return $chat->load(['receiver' => function ($query) {
-            $query->select('id', 'name')
-            ->with(['company' => function ($query) {
-                $query->select('id', 'user_id', 'name');
-                $query->with('logo');
-            }]);
-        }]);
+        return Response()->json([
+            'chat' => $chat->load(['receiver' => function ($query) {
+                $query->select('id', 'name')
+                    ->with(['company' => function ($query) {
+                        $query->select('id', 'user_id', 'name');
+                        $query->with('logo');
+                    }]);
+            }]),
+            'ad' => [
+                'name' => $ad->name,
+                'is_offer' => $ad->is_offer
+            ]
+        ]);
     }
 
     public function messages(int $chat_id)
     {
         $chat = Chat::findOrFail($chat_id);
         if($chat->sender_id == Auth()->id() || $chat->receiver_id == Auth()->id()){
-            return $chat->messages;
+            return $chat->messages->load('file');
         }else{
             return Response()->json(['message' => 'У вас нет прав для просмотра', 'errors' => ['error' => 'У вас нет прав для просмотра']], 403);
         }
@@ -72,14 +79,25 @@ class ChatService
             $data['chat_id'] = $chat_id;
             $data['user_id'] = Auth()->id();
 
+            unset($data['file']);
+
             $message = Message::create($data);
 
+            if($request->hasFile('file')) {
+                File::create([
+                    'fileable_id' => $message->id,
+                    'fileable_type' => 'App\Models\Message',
+                    'category' => 'file',
+                    'src' => env('APP_URL').$request->file('file')->store('messages', 'public')
+                ]);
+            }
+
             $pusher = new Pusher(
-                env('PUSHER_APP_KEY'),
-                env('PUSHER_APP_SECRET'),
-                env('PUSHER_APP_ID'),
+                config('services.pusher.app_key', '713314410e2c9ff64942'),
+                config('services.pusher.app_secret', 'a2943488eeda4502207e'),
+                config('services.pusher.app_id', '1591884'),
                 [
-                    'cluster' => env('PUSHER_APP_CLUSTER'),
+                    'cluster' => config('services.pusher.app_cluster', 'eu'),
                     'useTLS' => true,
                 ]
             );
@@ -90,7 +108,7 @@ class ChatService
                 'user' => Auth()->user(),
             ]);
 
-            return $message;
+            return $message->load('file');
 
         }else{
             return Response()->json(['message' => 'У вас нет прав для просмотра', 'errors' => ['error' => 'У вас нет прав для просмотра']], 403);

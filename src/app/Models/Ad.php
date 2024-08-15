@@ -223,6 +223,11 @@ class Ad extends Model
             'is_offer' => $this->is_offer,
             'is_selling' => $this->is_selling,
             'is_archive' => $this->is_archive,
+
+            'cost_by_price' => $this->cost_by_price,
+            'discount_cost' => $this->discount_cost,
+            'possibility_of_extension' => $this->possibility_of_extension,
+
             'created_at' => $this->created_at->toIso8601String(),
             'updated_at' => $this->updated_at->toIso8601String()
         ];

@@ -19,4 +19,9 @@ class Message extends Model
     {
         return $this->belongsTo(User::class, 'id', 'user_id');
     }
+
+    public function file(): \Illuminate\Database\Eloquent\Relations\MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable')->where('category', 'file');
+    }
 }

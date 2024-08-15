@@ -22,7 +22,8 @@ class SendRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'text' => 'required|string'
+            'text' => 'required|string',
+            'file' => 'nullable|file'
         ];
     }
 
@@ -30,7 +31,8 @@ class SendRequest extends FormRequest
     {
         return [
             'text.required' => 'Введите сообщение',
-            'text.string' => 'Сообщение должно быть строкой'
+            'text.string' => 'Сообщение должно быть строкой',
+            'file.file' => 'Неверный формат файла'
         ];
     }
 }

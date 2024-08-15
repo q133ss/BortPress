@@ -58,7 +58,7 @@ class UpdateRequest extends FormRequest
             'region_id' => 'nullable|exists:regions,id',
             'site_url' => 'nullable|url',
             'description' => 'nullable|string',
-            'types' => 'nullable|array',
+            'types' => 'required|array',
             'types.*' => ['exists:types,id']
         ];
     }
@@ -123,6 +123,7 @@ class UpdateRequest extends FormRequest
             'description.nullable' => 'Описание не обязательно к заполнению',
             'description.string' => 'Описание должно быть строкой',
 
+            'types.required' => 'Укажите формат рекламы',
             'types.array' => 'Формат рекламы должен быть массивом',
             'types.*.exists' => 'Указанного формата рекламы не существует'
         ];

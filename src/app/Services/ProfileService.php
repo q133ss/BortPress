@@ -8,6 +8,7 @@ use App\Models\File;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileService
@@ -104,13 +105,14 @@ class ProfileService
 
             DB::commit();
         }catch (\Exception $e){
+            Log::error($e);
             return Response()->json(['message' => 'Произошла ошибка, попробуйте еще раз', 'errors' => ['error' => 'Произошла ошибка, попробуйте еще раз']], 422);
         }
 
         return Response()->json([
             'status' => 'true',
             'user' => $user,
-            'company' => $company->load('documents', 'logo')
+            'company' => $company->load('documents', 'logo')->setRelation('formats', $company->formats())
         ]);
     }
 

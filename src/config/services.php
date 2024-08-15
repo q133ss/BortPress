@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'pusher' => [
+        'app_key' => env('PUSHER_APP_KEY', '713314410e2c9ff64942'),
+        'app_secret' => env('PUSHER_APP_SECRET', 'a2943488eeda4502207e'),
+        'app_id' => env('PUSHER_APP_ID', '1591884'),
+        'app_cluster' => env('PUSHER_APP_CLUSTER', 'eu'),
+    ],
+
 ];
