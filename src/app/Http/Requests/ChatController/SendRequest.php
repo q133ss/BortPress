@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\ChatController;
 
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class SendRequest extends FormRequest
 {
@@ -22,15 +24,29 @@ class SendRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'text' => 'required|string',
-            'file' => 'nullable|file'
+            'text' => [
+                'nullable',
+                'string'
+            ],
+            'file' => [
+                'nullable',
+                'file'
+            ]
         ];
+    }
+
+    public function withValidator(Validator $validator)
+    {
+        $validator->after(function ($validator) {
+            if (is_null($this->input('text')) && is_null($this->file('file'))) {
+                $validator->errors()->add('text', 'Введите сообщение или выберите файл.');
+            }
+        });
     }
 
     public function messages(): array
     {
         return [
-            'text.required' => 'Введите сообщение',
             'text.string' => 'Сообщение должно быть строкой',
             'file.file' => 'Неверный формат файла'
         ];

@@ -93,11 +93,11 @@ class ChatService
             }
 
             $pusher = new Pusher(
-                config('services.pusher.app_key', '713314410e2c9ff64942'),
-                config('services.pusher.app_secret', 'a2943488eeda4502207e'),
-                config('services.pusher.app_id', '1591884'),
+                '713314410e2c9ff64942',
+                'a2943488eeda4502207e',
+                '1591884',
                 [
-                    'cluster' => config('services.pusher.app_cluster', 'eu'),
+                    'cluster' => 'eu',
                     'useTLS' => true,
                 ]
             );
