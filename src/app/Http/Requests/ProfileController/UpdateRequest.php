@@ -3,6 +3,7 @@
 namespace App\Http\Requests\ProfileController;
 
 use App\Models\Role;
+use App\Models\Type;
 use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -59,7 +60,16 @@ class UpdateRequest extends FormRequest
             'site_url' => 'nullable|url',
             'description' => 'nullable|string',
             'types' => 'required|array',
-            'types.*' => ['exists:types,id']
+            'types.*' => [
+                'exists:types,id',
+                function(string $attribute, mixed $value, Closure $fail): void
+                {
+                    $parent = Type::where('id',$value)->pluck('parent_id')->first();
+                    if($parent != null){
+                        $fail('Указан неверный формат рекламы');
+                    }
+                }
+            ]
         ];
     }
 

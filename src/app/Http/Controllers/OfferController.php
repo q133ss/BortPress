@@ -63,4 +63,20 @@ class OfferController extends Controller
             'name' => $owner->name
         ]);
     }
+
+    public function hot(Request $request)
+    {
+        // У которых тег слив
+        $ads = Ad::leftJoin('users', 'users.id', 'ads.user_id')
+            ->where('users.is_block', 0)
+            ->where('is_offer', 1)
+            ->where('is_archive', 0)
+            ->whereJsonContains('pay_format', PayFormat::where('slug', 'sliv')->pluck('id')->first())
+            ->withFilter($request)
+            ->with('photo')
+            ->select('ads.*')
+            ->get();
+
+        return $ads;
+    }
 }

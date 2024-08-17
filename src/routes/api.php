@@ -19,6 +19,8 @@ Route::get('/index/catalog/{type}', [\App\Http\Controllers\IndexController::clas
 Route::get('/adv/offers', [App\Http\Controllers\OfferController::class, 'index']);
 Route::get('/adv/offers/{id}', [App\Http\Controllers\OfferController::class, 'show']);
 
+Route::get('/hot/offers', [App\Http\Controllers\OfferController::class, 'hot']);
+
 Route::get('/requests', [App\Http\Controllers\RequestController::class, 'index']);
 Route::get('/requests/{id}', [App\Http\Controllers\OfferController::class, 'show']);
 
@@ -61,6 +63,7 @@ Route::group(['middleware' => ['auth:sanctum','blockCheck']],function (){
         Route::get('/offer/{id}', [App\Http\Controllers\Buyer\OfferController::class, 'show']);
         Route::post('/offer/update/{id}', [App\Http\Controllers\Buyer\OfferController::class, 'update']);
         Route::delete('/offer/{id}', [App\Http\Controllers\Buyer\OfferController::class, 'delete']);
+        Route::delete('/offer/delete/{id}', [App\Http\Controllers\Platform\OfferController::class, 'delete']);
     });
 
     Route::post('/chat/create/{adv_id}', [App\Http\Controllers\ChatController::class, 'create']);
