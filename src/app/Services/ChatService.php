@@ -42,7 +42,7 @@ class ChatService
             // Чат не найден, создаем новый
             $chat = Chat::create([
                 'sender_id' => $currentUserId,
-                'receiver_id' => $userId,
+                'receiver_id' => $userId
             ]);
         }
 
@@ -55,6 +55,7 @@ class ChatService
                     }]);
             }]),
             'ad' => [
+                'id' => $ad->id,
                 'name' => $ad->name,
                 'is_offer' => $ad->is_offer
             ]
