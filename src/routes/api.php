@@ -70,6 +70,7 @@ Route::group(['middleware' => ['auth:sanctum','blockCheck']],function (){
     Route::get('/chats', [App\Http\Controllers\ChatController::class, 'index']);
     Route::get('/messages/{chat_id}', [App\Http\Controllers\ChatController::class, 'messages']);
     Route::post('/chat/send/{chat_id}', [App\Http\Controllers\ChatController::class, 'send']);
+    Route::get('/chat/{id}', [\App\Http\Controllers\ChatController::class, 'show']);
 });
 
 Route::prefix('admin')->middleware(['auth:sanctum', \App\Http\Middleware\IsAdmin::class])->group(function (){

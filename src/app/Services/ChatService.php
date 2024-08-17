@@ -105,10 +105,11 @@ class ChatService
             );
 
             $pusher->trigger('chat-' . $chat_id, 'MessageSent', [
-                'id' => $message->id,
-                'text' => $message->text,
-                'file' => $message->file,
-                'user' => Auth()->user(),
+//                'id' => $message->id,
+//                'text' => $message->text,
+//                'file' => $message->file,
+//                'user' => Auth()->user(),
+                'message' => $message->load('file')
             ]);
 
             return $message->load('file');
@@ -116,5 +117,36 @@ class ChatService
         }else{
             return Response()->json(['message' => 'У вас нет прав для просмотра', 'errors' => ['error' => 'У вас нет прав для просмотра']], 403);
         }
+    }
+
+    public function show($id)
+    {
+        $chat = Chat::findOrFail($id);
+
+        $usr = 'receiver';
+
+        $authId = Auth('sanctum')->id();
+
+        if(
+            $chat->receiver_id != $authId &&
+            $chat->sender_id != $authId
+        )
+        {
+            abort(403);
+        }
+
+        if($chat->receiver_id == $authId)
+        {
+            $usr = 'sender';
+        }
+
+        $chat->load([$usr => function ($query) {
+            $query->select('id', 'name')
+                ->with(['company' => function ($query) {
+                    $query->select('id', 'user_id', 'name');
+                    $query->with('logo');
+                }]);
+        }]);
+        return $chat;
     }
 }
