@@ -90,7 +90,7 @@ class ChatService
                     'fileable_id' => $message->id,
                     'fileable_type' => 'App\Models\Message',
                     'category' => 'file',
-                    'src' => env('APP_URL').$request->file('file')->store('messages', 'public')
+                    'src' => env('APP_URL').'/storage/'.$request->file('file')->store('messages', 'public')
                 ]);
             }
 
@@ -107,6 +107,7 @@ class ChatService
             $pusher->trigger('chat-' . $chat_id, 'MessageSent', [
                 'id' => $message->id,
                 'text' => $message->text,
+                'file' => $message->file,
                 'user' => Auth()->user(),
             ]);
 

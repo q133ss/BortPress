@@ -26,4 +26,9 @@ class ChatController extends Controller
     {
         return (new ChatService())->send($chat_id, $request);
     }
+
+    public function getById($id)
+    {
+        return (new ChatService())->sendById($id);
+    }
 }
