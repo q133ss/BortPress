@@ -473,6 +473,122 @@ class DatabaseSeeder extends Seeder
             'description'  => 'Описание'
         ]);
 
+        $hotOffers = [
+            [
+                'name' => 'Hot offer 1',
+                'type_id' => 2,
+                'inventory' => json_encode([6,8]),
+                'pay_format' => json_encode([1,4]),
+                'region_id' => 37,
+                'budget' => '200000',
+                'start_date' => now()->format('Y-m-d'),
+                'end_date' => now()->addDays(30)->format('Y-m-d'),
+                'is_unique' => 1,
+                'user_id' => 2,
+                'additional_info' => 'Дополнительная информация',
+                'link' => 'https://google.com',
+                'is_offer' => 1,
+                'is_selling' => 1,
+                'is_archive' => 0
+            ],
+            [
+                'name' => 'Hot offer 2',
+                'type_id' => 2,
+                'inventory' => json_encode([6,8]),
+                'pay_format' => json_encode([1,4]),
+                'region_id' => 37,
+                'budget' => '600000',
+                'start_date' => now()->format('Y-m-d'),
+                'end_date' => now()->addDays(30)->format('Y-m-d'),
+                'is_unique' => 1,
+                'user_id' => 2,
+                'additional_info' => 'Дополнительная информация',
+                'link' => 'https://google.com',
+                'is_offer' => 1,
+                'is_selling' => 1,
+                'is_archive' => 0
+            ],
+        ];
+
+        foreach ($hotOffers as $offer)
+        {
+            Ad::create($offer);
+        }
+
+        $requests = [
+            [
+                'name' => 'Запрос 1',
+                'type_id' => 1,
+                'inventory' => json_encode([6,8]),
+                'pay_format' => json_encode([1,4]),
+                'region_id' => 37,
+                'budget' => '200000',
+                'start_date' => now()->format('Y-m-d'),
+                'end_date' => now()->addDays(30)->format('Y-m-d'),
+                'is_unique' => 1,
+                'additional_info' => 'Дополнительная информация',
+                'link' => 'https://google.com',
+                'is_offer' => 0,
+                'is_selling' => 1,
+                'is_archive' => 0
+            ],
+            [
+                'name' => 'Запрос 2',
+                'type_id' => 1,
+                'inventory' => json_encode([6,8]),
+                'pay_format' => json_encode([1,4]),
+                'region_id' => 37,
+                'budget' => '600000',
+                'start_date' => now()->format('Y-m-d'),
+                'end_date' => now()->addDays(30)->format('Y-m-d'),
+                'is_unique' => 1,
+                'additional_info' => 'Дополнительная информация',
+                'link' => 'https://google.com',
+                'is_offer' => 0,
+                'is_selling' => 1,
+                'is_archive' => 0
+            ],
+            [
+                'name' => 'Запрос 3',
+                'type_id' => 8,
+                'inventory' => json_encode([6,8]),
+                'pay_format' => json_encode([1,4]),
+                'region_id' => 37,
+                'budget' => '900000',
+                'start_date' => now()->format('Y-m-d'),
+                'end_date' => now()->addDays(30)->format('Y-m-d'),
+                'is_unique' => 1,
+                'additional_info' => 'Дополнительная информация',
+                'link' => 'https://google.com',
+                'is_offer' => 0,
+                'is_selling' => 1,
+                'is_archive' => 0
+            ],
+            [
+                'name' => 'Запрос 4',
+                'type_id' => 13,
+                'inventory' => json_encode([6,8]),
+                'pay_format' => json_encode([1,4]),
+                'region_id' => 37,
+                'budget' => '900000',
+                'start_date' => now()->format('Y-m-d'),
+                'end_date' => now()->addDays(30)->format('Y-m-d'),
+                'is_unique' => 1,
+                'additional_info' => 'Дополнительная информация',
+                'link' => 'https://google.com',
+                'is_offer' => 0,
+                'is_selling' => 1,
+                'is_archive' => 0
+            ]
+        ];
+
+        $advId = User::where('email', 'adv@email.net')->pluck('id')->first();
+        foreach ($requests as $request){
+            $data = $request;
+            $data['user_id'] = $advId;
+            Ad::create($data);
+        }
+
         $this->command->alert('Seed завершен');
     }
 }

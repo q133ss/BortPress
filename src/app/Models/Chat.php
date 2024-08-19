@@ -29,4 +29,9 @@ class Chat extends Model
     {
         return $this->belongsTo(User::class, 'receiver_id', 'id');
     }
+
+    public function ad()
+    {
+        return $this->hasOne(Ad::class, 'id', 'ad_id');
+    }
 }

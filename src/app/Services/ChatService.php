@@ -30,12 +30,14 @@ class ChatService
             return Response()->json(['message' => 'Нельзя создать чат с самим собой', 'errors' => ['error' => 'Нельзя создать чат с самим собой']], 422);
         }
 
-        $chat = Chat::where(function ($query) use ($currentUserId, $userId) {
+        $chat = Chat::where(function ($query) use ($currentUserId, $userId, $adv_id) {
             $query->where('sender_id', $currentUserId)
-                ->where('receiver_id', $userId);
-        })->orWhere(function ($query) use ($currentUserId, $userId) {
+                ->where('receiver_id', $userId)
+                ->where('ad_id', $adv_id);
+        })->orWhere(function ($query) use ($currentUserId, $userId, $adv_id) {
             $query->where('sender_id', $userId)
-                ->where('receiver_id', $currentUserId);
+                ->where('receiver_id', $currentUserId)
+                ->where('ad_id', $adv_id);
         })->first();
 
         if (!$chat) {
@@ -43,7 +45,8 @@ class ChatService
             $chat = Chat::create([
                 'sender_id' => $currentUserId,
                 'receiver_id' => $userId,
-                'creator_id' => $currentUserId
+                'creator_id' => $currentUserId,
+                'ad_id' => $adv_id
             ]);
         }
 
@@ -146,7 +149,20 @@ class ChatService
                     $query->select('id', 'user_id', 'name');
                     $query->with('logo');
                 }]);
-        }]);
-        return $chat;
+        }
+        ]);
+
+        $data = [
+            'chat' => $chat,
+            'ad' => [
+                'id' => $chat->ad?->id,
+                'name' => $chat->ad?->name,
+                'is_offer' => $chat->ad?->is_offer,
+            ]
+        ];
+
+        unset($data['chat']['ad']);
+
+        return response()->json($data);
     }
 }

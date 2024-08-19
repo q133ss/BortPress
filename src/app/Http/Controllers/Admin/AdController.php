@@ -116,7 +116,7 @@ class AdController extends Controller
         return User::orderBy('created_at', 'DESC')->get();
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
         Ad::findOrFail($id);
         return Response()->json([

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('sender_id');
             $table->foreignId('receiver_id');
             $table->foreignId('creator_id');
+            $table->foreignId('ad_id');
             $table->timestamps();
         });
     }
