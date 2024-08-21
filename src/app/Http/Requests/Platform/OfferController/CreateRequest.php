@@ -24,10 +24,11 @@ class CreateRequest extends FormRequest
         return [
             'name' => 'required|string',
             'type_id' => 'required|exists:types,id',
-            'inventory' => 'required|array',
-            'inventory.*' => 'required|exists:items,id',
-            'pay_format' => 'required|array',
-            'region_id' => 'required|exists:regions,id',
+            'inventory' => 'required|exists:items,id',
+            //'inventory.*' => 'required|exists:items,id',
+            'pay_format' => 'required|exists:pay_formats,id',
+            'region_id' => 'required|array',
+            'region_id.*' => 'required|exists:regions,id',
             'budget' => 'required|integer',
             'document' => 'nullable|file',
             'start_date' => 'required|date_format:Y-m-d|after_or_equal:today',
@@ -52,7 +53,7 @@ class CreateRequest extends FormRequest
             'type_id.exists' => 'Указанного типа не существует',
 
             'inventory.required' => 'Укажите товар или услугу',
-            'inventory.array' => 'Инвентарь должен быть массивом',
+            'inventory.exists' => 'Указан неверный товар или услуга',
 
             'inventory.*.exists' => 'Указан неверный товар или услуга',
             'inventory.*.required' => 'Укажите товар или услугу',
@@ -61,8 +62,10 @@ class CreateRequest extends FormRequest
             'pay_format.string' => 'Формат оплаты должен быть строкой',
             'pay_format.in' => 'Формат оплаты должен быть одним из следующих: cash, barter, sliv',
 
-            'region_id.required' => 'Укажите регион',
-            'region_id.exists' => 'Указанного региона не существует',
+            'region_id.required' => 'Укажите регионы',
+            'region_id.array' => 'Регионы должны быть массивом',
+            'region_id.*.required' => 'Укажите регион',
+            'region_id.*.exists' => 'Указанного региона не существует',
 
             'budget.required' => 'Укажите бюджет',
             'budget.integer' => 'Бюджет должен быть целым числом',

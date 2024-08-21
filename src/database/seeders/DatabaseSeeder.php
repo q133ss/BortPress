@@ -75,22 +75,26 @@ class DatabaseSeeder extends Seeder
             [
                 'slug' => 'cash',
                 'name' => 'Денежные средства',
-                'is_offer' => false
+                'is_offer' => false,
+                'tooltip' => 'Денежные средства'
             ],
             [
                 'slug' => 'barter',
                 'name' => 'Бартер',
-                'is_offer' => false
+                'is_offer' => false,
+                'tooltip' => 'Бартер'
             ],
             [
                 'slug' => 'trade',
                 'name' => 'Обмен рекламным трафиком',
-                'is_offer' => true
+                'is_offer' => true,
+                'tooltip' => 'Обмен рекламным трафиком'
             ],
             [
                 'slug' => 'sliv',
                 'name' => 'Слив',
-                'is_offer' => true
+                'is_offer' => true,
+                'tooltip' => 'Слив'
             ]
         ];
 

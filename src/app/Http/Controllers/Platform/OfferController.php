@@ -21,7 +21,11 @@ class OfferController extends Controller
 
     public function show($id)
     {
-        return Ad::findOrFail($id)->load('photo', 'document', 'item');
+        $ad = Ad::findOrFail($id)->load('photo');
+        $ad->load('document');
+        $ad->setRelation('item', $ad->item());
+        $ad->setRelation('regions', $ad->getRegions());
+        return $ad;
     }
 
     public function update(int $id, CreateRequest $request)

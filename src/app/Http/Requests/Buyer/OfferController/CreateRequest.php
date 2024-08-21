@@ -37,7 +37,7 @@ class CreateRequest extends FormRequest
             'additional_info' => 'required|string',
             'link' => 'required|url',
             'photo' => 'nullable|file',
-            'is_selling' => 'required|in:0,1'
+            //'is_selling' => 'required|in:0,1'
         ];
     }
 

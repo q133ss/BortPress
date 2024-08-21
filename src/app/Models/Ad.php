@@ -166,11 +166,12 @@ class Ad extends Model
     public function item()
     {
         // Обработка случая, когда inventory может быть null
-        $inventoryIds = $this->inventory ?? [];
+        //$inventoryIds = $this->inventory ?? [];
+
+        $inventoryIds = json_decode($this->attributes['inventory'], true) ?? [];
 
         return \App\Models\Item::whereIn('id', $inventoryIds)->get();
     }
-
     public function getType()
     {
         return $this->hasOne(Type::class, 'id', 'type_id');
@@ -228,8 +229,18 @@ class Ad extends Model
             'discount_cost' => $this->discount_cost,
             'possibility_of_extension' => $this->possibility_of_extension,
 
+            'regions' => $this->getRegions(),
+
             'created_at' => $this->created_at->toIso8601String(),
             'updated_at' => $this->updated_at->toIso8601String()
         ];
+    }
+
+    public function getRegions()
+    {
+        if($this->regions != null && $this->regions != '{}') {
+            return Region::whereIn('id', json_decode($this->regions))->get();
+        }
+        return [];
     }
 }

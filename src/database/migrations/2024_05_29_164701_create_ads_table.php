@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('type_id')->constrained('types')->onDelete('cascade');
             $table->json('inventory')->nullable();
             $table->json('pay_format');
-            $table->foreignId('region_id')->constrained('regions')->onDelete('cascade');
+            $table->foreignId('region_id')->nullable()->constrained('regions')->onDelete('cascade');
             $table->unsignedBigInteger('budget');
             $table->date('start_date');
             $table->date('end_date');
@@ -29,6 +29,7 @@ return new class extends Migration
             $table->boolean('is_offer');
             $table->boolean('is_selling')->default(1);
             $table->boolean('is_archive')->default(0);
+            $table->json('regions')->nullable();
 
             $table->double('cost_by_price')->nullable()->comment('Цена по прайсу');
             $table->double('discount_cost')->nullable()->comment('Цена со скидкой');

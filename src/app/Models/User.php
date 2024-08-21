@@ -81,6 +81,7 @@ class User extends Authenticatable
                     'user_name' => $otherUser->name,
                     'company_name' => $otherUser->company?->name,
                     'latest_message' => $chat->latestMessage?->text,
+                    'latest_message_date' => $chat->latestMessage?->created_at,
                 ];
             });
 

@@ -7,6 +7,7 @@ use App\Jobs\Platform\SearchAdsJob;
 use App\Models\Ad;
 use App\Models\File;
 use App\Models\PayFormat;
+use App\Models\Region;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,7 +25,14 @@ class OfferService
         unset($data['discount_cost']);
         unset($data['possibility_of_extension']);
 
-        $data['pay_format'] = json_encode($request->pay_format);
+//        $data['pay_format'] = json_encode($request->pay_format);
+        #todo теперь это не массив
+        //$data['pay_format'] = json_decode($request->pay_format);
+        $data['is_selling'] = 0;
+
+        unset($data['region_id']);
+        //$data['region_id'] = Region::pluck('id')->first();
+        $data['regions'] = json_encode($request->region_id);
 
         //Проверяем на уникальность!
         $adCheck = Ad::where('name', $data['name'])
@@ -32,8 +40,8 @@ class OfferService
             #TODO нужен тест
             //->where('inventory', $data['inventory'])
             ->whereJsonContains('inventory', $data['inventory'])
-            ->whereJsonContains('pay_format', json_decode($data['pay_format']))
-            ->where('region_id', $data['region_id'])
+            ->whereJsonContains('pay_format', $data['pay_format'])
+            ->whereJsonContains('regions', $data['regions'])
             ->where('budget', $data['budget'])
             ->where('start_date', $data['start_date'])
             ->where('end_date', $data['end_date'])
@@ -42,7 +50,7 @@ class OfferService
             ->exists();
 
         $paySlugs = DB::table('pay_formats')
-            ->whereIn('id', json_decode($data['pay_format']))
+            ->whereIn('id', $data['pay_format'])
             ->pluck('slug')
             ->all();
 
@@ -62,6 +70,8 @@ class OfferService
                 return Response()->json(['message' => 'Вместе с "Обмен рекламным трафиком" можно выбрать только денежные средства', 'errors' => ['error' => 'При формате оплаты "обмен рекламным трафиком" нельзя выбрать другие варианты']], 422);
             }
         }
+
+        $data['inventory'] = [$data['inventory']];
 
         if (!$adCheck) {
             $data['is_offer'] = $is_offer;
@@ -91,7 +101,7 @@ class OfferService
 
         return Response()->json([
             'message' => 'true',
-            'ad' => $ad->load('photo', 'document')
+            'ad' => $ad->load('photo', 'document')->setRelation('regions', $ad->getRegions())
         ], 201);
     }
 

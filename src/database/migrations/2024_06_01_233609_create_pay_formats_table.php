@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
+            $table->string('tooltip')->nullable();
             $table->boolean('is_offer')->default(0);
             $table->timestamps();
         });
