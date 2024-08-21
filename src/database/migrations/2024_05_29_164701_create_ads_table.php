@@ -35,6 +35,8 @@ return new class extends Migration
             $table->double('discount_cost')->nullable()->comment('Цена со скидкой');
 
             $table->boolean('possibility_of_extension')->default(false)->comment('Возможность продления');
+
+            $table->date('archive_date')->nullable();
             $table->timestamps();
         });
     }

@@ -231,7 +231,7 @@ class OfferService
         if($offer->user_id != Auth('sanctum')->id()){
             abort(403);
         }
-        $offer->delete();
+        $offer->update(['is_archive' => 1, 'archive_date' => now()]);
         return Response()->json([
             'message' => 'true'
         ]);

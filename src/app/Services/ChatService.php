@@ -163,6 +163,13 @@ class ChatService
 
         unset($data['chat']['ad']);
 
+        // Переименовываем поле 'sender' в 'receiver' если оно существует
+        if (isset($data['chat']['sender'])) {
+            $data['chat']['receiver'] = $data['chat']['sender'];
+            unset($data['chat']['sender']);
+        }
+
+
         return response()->json($data);
     }
 }

@@ -231,6 +231,9 @@ class Ad extends Model
 
             'regions' => $this->getRegions(),
 
+            'photo' => $this->photo,
+            'documents' => $this->document,
+
             'created_at' => $this->created_at->toIso8601String(),
             'updated_at' => $this->updated_at->toIso8601String()
         ];
