@@ -26,6 +26,8 @@ Route::get('/requests/{id}', [App\Http\Controllers\OfferController::class, 'show
 
 Route::get('/unique/offers', [\App\Http\Controllers\OfferController::class, 'unique']);
 
+Route::get('/knowledge_base', [\App\Http\Controllers\Admin\KnowledgeBaseController::class, 'index']);
+
 Route::group(['middleware' => ['auth:sanctum','blockCheck']],function (){
     Route::get('/subscribe/check', [App\Http\Controllers\SubscribeController::class, 'check']);
 
@@ -86,6 +88,8 @@ Route::prefix('admin')->middleware(['auth:sanctum', \App\Http\Middleware\IsAdmin
     Route::apiResource('ad', \App\Http\Controllers\Admin\AdController::class);
     Route::post('/user/comment/{id}', [\App\Http\Controllers\Admin\CommentController::class, 'store']);
     Route::get('/comments/{id}', [\App\Http\Controllers\Admin\CommentController::class, 'getById']);
+
+    Route::apiResource('knowledge_base', \App\Http\Controllers\Admin\KnowledgeBaseController::class)->except('index');
 });
 
 Route::post('/feedback', [\App\Http\Controllers\FeedbackController::class, 'store']);

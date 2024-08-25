@@ -209,7 +209,11 @@ class Ad extends Model
 
     public function barterItems()
     {
-        return Item::whereIn('id', $this->barter_items)->get();
+        if($this->barter_items != null)
+        {
+            return Item::whereIn('id', $this->barter_items)->get();
+        }
+        return [];
     }
 
     public function toArray()
