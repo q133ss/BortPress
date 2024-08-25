@@ -32,7 +32,7 @@ class OfferService
 
         unset($data['region_id']);
         //$data['region_id'] = Region::pluck('id')->first();
-        $data['regions'] = json_encode($request->region_id);
+        $data['regions'] = (array) $request->region_id;
 
         //Проверяем на уникальность!
         $adCheck = Ad::where('name', $data['name'])
@@ -70,8 +70,6 @@ class OfferService
                 return Response()->json(['message' => 'Вместе с "Обмен рекламным трафиком" можно выбрать только денежные средства', 'errors' => ['error' => 'При формате оплаты "обмен рекламным трафиком" нельзя выбрать другие варианты']], 422);
             }
         }
-
-        $data['inventory'] = [$data['inventory']];
 
         if (!$adCheck) {
             $data['is_offer'] = $is_offer;

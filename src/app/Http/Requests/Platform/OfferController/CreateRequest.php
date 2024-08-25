@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Platform\OfferController;
 
+use App\Models\Type;
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateRequest extends FormRequest
@@ -23,7 +25,18 @@ class CreateRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'type_id' => 'required|exists:types,id',
+            'type_id' => [
+                'required',
+                'exists:types,id',
+                function(string $attribute, mixed $value, Closure $fail): void
+                {
+                    $type = Type::find($value);
+                    if($type->parent_id != null)
+                    {
+                        $fail('Указан неверный тип');
+                    }
+                }
+            ],
             'inventory' => 'required|exists:items,id',
             //'inventory.*' => 'required|exists:items,id',
             'pay_format' => 'required|exists:pay_formats,id',
@@ -39,7 +52,14 @@ class CreateRequest extends FormRequest
 
             'cost_by_price' => 'nullable|numeric',
             'discount_cost' => 'nullable|numeric',
-            'possibility_of_extension' => 'nullable|boolean'
+            'possibility_of_extension' => 'nullable|boolean',
+
+            'barter_items' => [
+                'nullable',
+                'array',
+                'max:5'
+            ],
+            'barter_items.*' => 'required|exists:items,id'
         ];
     }
 
@@ -92,7 +112,13 @@ class CreateRequest extends FormRequest
 
             'cost_by_price.numeric' => 'Цена по прайсу должна быть числом',
             'discount_cost.numeric' => 'Цена со скидкой должна быть числом',
-            'possibility_of_extension.boolean' => 'Возможность продления должно быть 1 или 0'
+            'possibility_of_extension.boolean' => 'Возможность продления должно быть 1 или 0',
+
+            'barter_items.array' => 'Товары или услуги должны быть массивом',
+            'barter_items.max' => 'Количество товаров или услуг не должно превышать 5',
+
+            'barter_items.*.required' => 'Укажите товар или услугу',
+            'barter_items.*.exists' => 'Указанного товара или услуги не существует',
         ];
     }
 }

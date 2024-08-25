@@ -47,6 +47,9 @@ Route::group(['middleware' => ['auth:sanctum','blockCheck']],function (){
 
     Route::post('/item', [\App\Http\Controllers\ItemController::class, 'store']);
 
+    // Список всех родительских типов
+    Route::get('/main/types', [\App\Http\Controllers\OfferController::class, 'types']);
+
     // ЛК Продавца
     Route::group(['prefix' => 'platform'],function (){
         Route::post('/offer', [App\Http\Controllers\Platform\OfferController::class, 'create']);

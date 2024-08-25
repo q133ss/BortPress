@@ -16,6 +16,8 @@ class Ad extends Model
     protected $casts = [
         'pay_format' => 'array',
         'inventory' => 'array',
+        'barter_items' => 'array',
+        'regions' => 'array',
     ];
 
     public function __getPayFormatAttribute($value)
@@ -205,6 +207,11 @@ class Ad extends Model
         return Region::find($value);
     }
 
+    public function barterItems()
+    {
+        return Item::whereIn('id', $this->barter_items)->get();
+    }
+
     public function toArray()
     {
         return [
@@ -234,6 +241,8 @@ class Ad extends Model
             'photo' => $this->photo,
             'documents' => $this->document,
 
+            'barter_items' => $this->barterItems(),
+
             'created_at' => $this->created_at->toIso8601String(),
             'updated_at' => $this->updated_at->toIso8601String()
         ];
@@ -242,7 +251,7 @@ class Ad extends Model
     public function getRegions()
     {
         if($this->regions != null && $this->regions != '{}') {
-            return Region::whereIn('id', json_decode($this->regions))->get();
+            return Region::whereIn('id', $this->regions)->get();
         }
         return [];
     }

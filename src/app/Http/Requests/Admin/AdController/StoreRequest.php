@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Admin\AdController;
 
+use App\Models\Type;
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRequest extends FormRequest
@@ -24,7 +26,18 @@ class StoreRequest extends FormRequest
         return [
             'user_id' => 'required|exists:users,id',
             'name' => 'required|string',
-            'type_id' => 'required|exists:types,id',
+            'type_id' => [
+                'required',
+                'exists:types,id',
+                function(string $attribute, mixed $value, Closure $fail): void
+                {
+                    $type = Type::find($value);
+                    if($type->parent_id != null)
+                    {
+                        $fail('Указан неверный тип');
+                    }
+                }
+            ],
             'inventory' => 'required|array',
             'inventory.*' => 'required|exists:items,id',
             'pay_format' => 'required|array',

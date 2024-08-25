@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests\Buyer\OfferController;
 
+use App\Models\PayFormat;
+use App\Models\Type;
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateRequest extends FormRequest
@@ -23,12 +26,35 @@ class CreateRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'type_id' => 'required|exists:types,id',
-
-            'inventory' => 'required|array',
-            'inventory.*' => 'required|exists:items,id',
+            'type_id' => [
+                'required',
+                'exists:types,id',
+                function(string $attribute, mixed $value, Closure $fail): void
+                {
+                    $type = Type::find($value);
+                    if($type->parent_id != null)
+                    {
+                        $fail('Указан неверный тип');
+                    }
+                }
+            ],
+            //'inventory' => 'required|array',
+            'inventory' => 'required|exists:items,id',
+//            'inventory.*' => 'required|exists:items,id',
 
             'pay_format' => 'required|array',
+            'pay_format.*' => [
+                'required',
+                'exists:pay_formats,id',
+                function(string $attribute, mixed $value, Closure $fail): void
+                {
+                    $format = PayFormat::find($value);
+                    if($format->slug == 'barter' && $this->barter_items == null)
+                    {
+                        $fail('Укажите товары или услуги');
+                    }
+                }
+            ],
             'region_id' => 'required|exists:regions,id',
             'budget' => 'required|integer',
             'document' => 'nullable|file',
@@ -37,6 +63,8 @@ class CreateRequest extends FormRequest
             'additional_info' => 'required|string',
             'link' => 'required|url',
             'photo' => 'nullable|file',
+            'barter_items' => 'nullable|array|max:5',
+            'barter_items.*' => 'required|exists:items,id'
             //'is_selling' => 'required|in:0,1'
         ];
     }
@@ -86,7 +114,13 @@ class CreateRequest extends FormRequest
             'photo.file' => 'Фото должно быть файлом',
 
             'is_selling.required' => 'Укажите тип объявления',
-            'is_selling.in' => 'Указан неверный тип объявления'
+            'is_selling.in' => 'Указан неверный тип объявления',
+
+            'barter_items.array' => 'Товары или услуги должны быть массивом',
+            'barter_items.max' => 'Количество товаров или услуг не должно превышать 5',
+
+            'barter_items.*.required' => 'Укажите товар или услугу',
+            'barter_items.*.exists' => 'Указанного товара или услуги не существует',
         ];
     }
 }

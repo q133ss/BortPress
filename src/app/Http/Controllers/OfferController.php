@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\PayFormat;
 use App\Models\Region;
 use App\Models\Role;
+use App\Models\Type;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -78,5 +79,10 @@ class OfferController extends Controller
             ->get();
 
         return $ads;
+    }
+
+    public function types()
+    {
+        return Type::where('parent_id', null)->get();
     }
 }
