@@ -64,7 +64,18 @@ class CreateRequest extends FormRequest
             'link' => 'required|url',
             'photo' => 'nullable|file',
             'barter_items' => 'nullable|array|max:5',
-            'barter_items.*' => 'required|exists:items,id'
+            'barter_items.*' => 'required|exists:items,id',
+            'option_id' => [
+                'required',
+                function(string $attribute, mixed $value, Closure $fail): void
+                {
+                    $parent = Type::find($value);
+                    if($parent == null || $parent->parent_id != $this->type_id)
+                    {
+                        $fail('Указана неверная опция');
+                    }
+                }
+            ]
             //'is_selling' => 'required|in:0,1'
         ];
     }
@@ -121,6 +132,8 @@ class CreateRequest extends FormRequest
 
             'barter_items.*.required' => 'Укажите товар или услугу',
             'barter_items.*.exists' => 'Указанного товара или услуги не существует',
+
+            'option_id.required' => 'Укажите опцию'
         ];
     }
 }

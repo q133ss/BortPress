@@ -216,6 +216,11 @@ class Ad extends Model
         return [];
     }
 
+    public function getOption()
+    {
+        return $this->hasOne(Type::class, 'id', 'option_id');
+    }
+
     public function toArray()
     {
         return [
@@ -246,6 +251,7 @@ class Ad extends Model
             'documents' => $this->document,
 
             'barter_items' => $this->barterItems(),
+            'option' => $this->getOption,
 
             'created_at' => $this->created_at->toIso8601String(),
             'updated_at' => $this->updated_at->toIso8601String()

@@ -37,6 +37,7 @@ return new class extends Migration
             $table->boolean('possibility_of_extension')->default(false)->comment('Возможность продления');
 
             $table->json('barter_items')->nullable();
+            $table->foreignId('option_id')->nullable();
 
             $table->date('archive_date')->nullable();
             $table->timestamps();

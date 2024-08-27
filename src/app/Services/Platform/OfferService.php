@@ -8,6 +8,7 @@ use App\Models\Ad;
 use App\Models\File;
 use App\Models\PayFormat;
 use App\Models\Region;
+use App\Models\Type;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
