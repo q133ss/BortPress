@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Requests\ProfileController\UpdateRequest;
 use App\Models\Company;
 use App\Models\File;
+use App\Models\Region;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -47,7 +48,7 @@ class ProfileService
                     'ogrn' => $request->ogrn,
                     'fact_address' => $request->fact_address,
                     'ur_address' => $request->ur_address,
-                    'region_id' => $request->region_id,
+                    'region_id' => $request->region_id ?? Region::pluck('id')->first(),
                     'site_url' => $request->site_url,
                     'description' => $request->description,
                     'types' => $request->types
@@ -60,7 +61,7 @@ class ProfileService
                     'ogrn' => $request->ogrn,
                     'fact_address' => $request->fact_address,
                     'ur_address' => $request->ur_address,
-                    'region_id' => $request->region_id,
+                    //'region_id' => $request->region_id,
                     'site_url' => $request->site_url,
                     'description' => $request->description,
                     'types' => $request->types

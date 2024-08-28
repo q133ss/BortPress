@@ -105,7 +105,7 @@ class Ad extends Model
                     $ids = explode(',', $inventory); // Разбиваем строку на массив ID
                     return $query->where(function ($query) use ($ids) {
                         foreach ($ids as $id) {
-                            $query->orWhereJsonContains('inventory', (int) $id);
+                            $query->where('option_id', (int) $id);
                         }
                     });
                 }
@@ -199,7 +199,7 @@ class Ad extends Model
     public function getPayFormatAttribute($value)
     {
         $payFormatIds = json_decode($value) ?? [];
-        return PayFormat::whereIn('id', $payFormatIds)->get();
+        return PayFormat::where('id', $payFormatIds)->get();
     }
 
     public function getRegionIdAttribute($value)

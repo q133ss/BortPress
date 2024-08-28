@@ -56,7 +56,6 @@ class UpdateRequest extends FormRequest
             'ogrn' => 'nullable|string|max:255',
             'fact_address' => 'nullable|string|max:255',
             'ur_address' => 'nullable|string|max:255',
-            'region_id' => 'nullable|exists:regions,id',
             'site_url' => 'nullable|url',
             'description' => 'nullable|string',
             'types' => 'required|array',
@@ -124,7 +123,7 @@ class UpdateRequest extends FormRequest
             'ur_address.string' => 'Юридический адрес должен быть строкой',
             'ur_address.max' => 'Юридический адрес не должен превышать 255 символов',
 
-            'region_id.nullable' => 'Регион не обязателен к заполнению',
+            'region_id.required' => 'Регион обязателен к заполнению',
             'region_id.exists' => 'Выбранного региона не существует',
 
             'site_url.nullable' => 'Адрес сайта не обязателен к заполнению',

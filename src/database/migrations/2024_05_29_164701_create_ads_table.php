@@ -18,13 +18,13 @@ return new class extends Migration
             $table->json('inventory')->nullable();
             $table->json('pay_format');
             $table->foreignId('region_id')->nullable()->constrained('regions')->onDelete('cascade');
-            $table->unsignedBigInteger('budget');
+            $table->unsignedBigInteger('budget')->nullable();
             $table->date('start_date');
             $table->date('end_date');
             $table->boolean('is_unique')->default(0)->comment('Уникальное для это площадки? Ставит админ');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->text('additional_info');
-            $table->string('link');
+            $table->string('link')->nullable();
 //            $table->foreignId('items')->nullable();
             $table->boolean('is_offer');
             $table->boolean('is_selling')->default(1);

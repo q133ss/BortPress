@@ -39,7 +39,7 @@ class CreateRequest extends FormRequest
                 }
             ],
             //'inventory' => 'required|array',
-            'inventory' => 'required|exists:items,id',
+            'inventory' => 'nullable|exists:items,id',
 //            'inventory.*' => 'required|exists:items,id',
 
             'pay_format' => 'required|array',
@@ -61,7 +61,7 @@ class CreateRequest extends FormRequest
             'start_date' => 'required|date_format:Y-m-d|after_or_equal:today',
             'end_date' => 'required|date_format:Y-m-d|after:start_date',
             'additional_info' => 'required|string',
-            'link' => 'required|url',
+            'link' => 'nullable|url',
             'photo' => 'nullable|file',
             'barter_items' => 'nullable|array|max:5',
             'barter_items.*' => 'required|exists:items,id',

@@ -40,7 +40,7 @@ class OfferService
             ->where('type_id', $data['type_id'])
             #TODO нужен тест
             //->where('inventory', $data['inventory'])
-            ->whereJsonContains('inventory', $data['inventory'])
+            ->whereJsonContains('inventory', $data['inventory'] ?? null)
             ->whereJsonContains('pay_format', $data['pay_format'])
             ->whereJsonContains('regions', $data['regions'])
             ->where('budget', $data['budget'])
@@ -51,7 +51,7 @@ class OfferService
             ->exists();
 
         $paySlugs = DB::table('pay_formats')
-            ->whereIn('id', $data['pay_format'])
+            ->where('id', $data['pay_format'])
             ->pluck('slug')
             ->all();
 
@@ -59,12 +59,12 @@ class OfferService
         if(in_array('trade', $paySlugs) && count($paySlugs) > 1){
             return Response()->json(['message' => 'При формате оплаты "обмен рекламным трафиком" нельзя выбрать другие варианты', 'errors' => ['error' => 'При формате оплаты "обмен рекламным трафиком" нельзя выбрать другие варианты']], 422);
         }
-        if(in_array('sliv', $paySlugs)){
-            unset($paySlugs['cash']);
-            if(count($paySlugs) > 0){
-                return Response()->json(['message' => 'Вместе со сливом можно выбрать только денежные средства', 'errors' => ['error' => 'При формате оплаты "обмен рекламным трафиком" нельзя выбрать другие варианты']], 422);
-            }
-        }
+//        if(in_array('sliv', $paySlugs)){
+//            unset($paySlugs['cash']);
+//            if(count($paySlugs) > 0){
+//                return Response()->json(['message' => 'Вместе со сливом можно выбрать только денежные средства', 'errors' => ['error' => 'При формате оплаты "обмен рекламным трафиком" нельзя выбрать другие варианты']], 422);
+//            }
+//        }
         if(in_array('trade', $paySlugs) ){
             unset($paySlugs['cash']);
             if(count($paySlugs) > 0){
@@ -80,7 +80,7 @@ class OfferService
                     'fileable_id' => $ad->id,
                     'fileable_type' => 'App\Models\Ad',
                     'category' => 'document',
-                    'src' => env('APP_URL').$request->file('document')->store('documents', 'public')
+                    'src' => env('APP_URL').'/storage/'.$request->file('document')->store('documents', 'public')
                 ]);
             }
 
@@ -89,7 +89,7 @@ class OfferService
                     'fileable_id' => $ad->id,
                     'fileable_type' => 'App\Models\Ad',
                     'category' => 'photo',
-                    'src' => env('APP_URL').$request->file('photo')->store('photos', 'public')
+                    'src' => env('APP_URL').'/storage/'.$request->file('photo')->store('photos', 'public')
                 ]);
             }
 

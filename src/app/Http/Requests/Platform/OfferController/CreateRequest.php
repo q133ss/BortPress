@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Platform\OfferController;
 
+use App\Models\PayFormat;
 use App\Models\Type;
 use Closure;
 use Illuminate\Foundation\Http\FormRequest;
@@ -37,9 +38,30 @@ class CreateRequest extends FormRequest
                     }
                 }
             ],
-            'inventory' => 'required|exists:items,id',
+            'inventory' => 'nullable|exists:items,id',
             //'inventory.*' => 'required|exists:items,id',
-            'pay_format' => 'required|exists:pay_formats,id',
+            'pay_format' => [
+                'required',
+                'exists:pay_formats,id',
+                function(string $attribute, mixed $value, Closure $fail): void
+                {
+                    $format = PayFormat::where('id', $value)->pluck('slug')->first();
+                    if($format == 'barter' && $this->barter_items == null)
+                    {
+                        $fail('Укажите товары или услуги');
+                    }
+
+                    if($format == 'sliv' && $this->cost_by_price == null)
+                    {
+                        $fail('Укажите цену по прайсу');
+                    }
+
+                    if($format == 'sliv' && $this->possibility_of_extension == null)
+                    {
+                        $fail('Укажите возможность продления');
+                    }
+                }
+            ],
             'region_id' => 'required|array',
             'region_id.*' => 'required|exists:regions,id',
             'budget' => 'required|integer',
@@ -59,7 +81,19 @@ class CreateRequest extends FormRequest
                 'array',
                 'max:5'
             ],
-            'barter_items.*' => 'required|exists:items,id'
+            'barter_items.*' => 'required|exists:items,id',
+
+            'option_id' => [
+                'required',
+                function(string $attribute, mixed $value, Closure $fail): void
+                {
+                    $parent = Type::find($value);
+                    if($parent == null || $parent->parent_id != $this->type_id)
+                    {
+                        $fail('Указана неверная опция');
+                    }
+                }
+            ]
         ];
     }
 
@@ -119,6 +153,8 @@ class CreateRequest extends FormRequest
 
             'barter_items.*.required' => 'Укажите товар или услугу',
             'barter_items.*.exists' => 'Указанного товара или услуги не существует',
+
+            'option_id.required' => 'Укажите опцию'
         ];
     }
 }
