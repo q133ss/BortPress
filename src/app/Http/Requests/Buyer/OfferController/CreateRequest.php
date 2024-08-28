@@ -42,8 +42,8 @@ class CreateRequest extends FormRequest
             'inventory' => 'nullable|exists:items,id',
 //            'inventory.*' => 'required|exists:items,id',
 
-            'pay_format' => 'required|array',
-            'pay_format.*' => [
+            //'pay_format' => 'required|array',
+            'pay_format' => [
                 'required',
                 'exists:pay_formats,id',
                 function(string $attribute, mixed $value, Closure $fail): void
