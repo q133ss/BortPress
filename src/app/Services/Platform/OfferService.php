@@ -43,7 +43,7 @@ class OfferService
             ->whereJsonContains('inventory', $data['inventory'] ?? null)
             ->whereJsonContains('pay_format', $data['pay_format'])
             ->whereJsonContains('regions', $data['regions'])
-            ->where('budget', $data['budget'])
+            ->where('budget', $data['budget'] ?? null)
             ->where('start_date', $data['start_date'])
             ->where('end_date', $data['end_date'])
             ->where('user_id', $data['user_id'])
@@ -143,10 +143,10 @@ class OfferService
 
         $adCheck = Ad::where('name', $data['name'])
             ->where('type_id', $data['type_id'])
-            ->where('inventory', $data['inventory'])
+            ->where('inventory', $data['inventory'] ?? null)
             ->whereJsonContains('pay_format', json_decode($data['pay_format']))
             ->where('region_id', $data['region_id'])
-            ->where('budget', $data['budget'])
+            ->where('budget', $data['budget'] ?? null)
             ->where('start_date', $data['start_date'])
             ->where('end_date', $data['end_date'])
             ->where('user_id', Auth()->id())
@@ -213,7 +213,7 @@ class OfferService
                 'src' => env('APP_URL').'/storage/'.$request->file('photo')->store('photos', 'public')
             ]);
         }
-
+        unset($data['region_id']);
         $ad->update($data);
 
         SearchAdsJob::dispatch($ad);

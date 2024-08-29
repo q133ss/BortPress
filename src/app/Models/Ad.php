@@ -193,7 +193,7 @@ class Ad extends Model
     {
         $inventoryIds = json_decode($value) ?? [];
 
-        return Item::whereIn('id', $inventoryIds)->get();
+        return Item::whereIn('id', $inventoryIds)->with('category')->get();
     }
 
     public function getPayFormatAttribute($value)

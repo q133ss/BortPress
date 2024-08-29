@@ -53,10 +53,14 @@ class CreateRequest extends FormRequest
                     {
                         $fail('Укажите товары или услуги');
                     }
+
+                    if ($format->slug != 'sliv' && empty($this->budget)) {
+                        $fail('Укажите бюджет');
+                    }
                 }
             ],
             'region_id' => 'required|exists:regions,id',
-            'budget' => 'required|integer',
+            'budget' => 'integer',
             'document' => 'nullable|file',
             'start_date' => 'required|date_format:Y-m-d|after_or_equal:today',
             'end_date' => 'required|date_format:Y-m-d|after:start_date',
@@ -101,7 +105,6 @@ class CreateRequest extends FormRequest
             'region_id.required' => 'Укажите регион',
             'region_id.exists' => 'Указанного региона не существует',
 
-            'budget.required' => 'Укажите бюджет',
             'budget.integer' => 'Бюджет должен быть целым числом',
 
             'document.required' => 'Загрузите документ',

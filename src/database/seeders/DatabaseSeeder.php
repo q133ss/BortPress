@@ -66,7 +66,7 @@ class DatabaseSeeder extends Seeder
             'fact_address' => "Воронеж, Ленина, 1",
             'ur_address' => "Воронеж, Ленина, 2",
             'region_id' => 37,
-            'types' => [1,9],
+            'types' => [1,8],
             'site_url' => "https://google.com",
             'description' => "Описание компании",
         ]);
