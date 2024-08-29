@@ -118,27 +118,47 @@ class OfferService
 
         $sliv_id = PayFormat::where('slug', 'sliv')->pluck('id')->first();
 
-        //$payFormats = $ad->getAttribute('pay_format')->pluck('id')->all();
-        $payFormats = $data['pay_format'];
+        if(is_array($data['pay_format'])) {
+            $payFormats = $data['pay_format'];
 
-        if(!in_array($sliv_id, $payFormats))
-        {
-            unset($data['cost_by_price']);
-            unset($data['discount_cost']);
-            unset($data['possibility_of_extension']);
+            if (!in_array($sliv_id, $payFormats)) {
+                unset($data['cost_by_price']);
+                unset($data['discount_cost']);
+                unset($data['possibility_of_extension']);
+            } else {
+                $request->validate(
+                    [
+                        'cost_by_price' => 'required',
+                        'discount_cost' => 'required',
+                        'possibility_of_extension' => 'required'
+                    ],
+                    [
+                        'cost_by_price.required' => 'Поле "Цена по прайсу" обязательно для заполнения.',
+                        'discount_cost.required' => 'Поле "Цена со скидкой" обязательно для заполнения.',
+                        'possibility_of_extension.required' => 'Поле "Возможность продления" обязательно для заполнения.',
+                    ]
+                );
+            }
         }else{
-            $request->validate(
-                [
-                    'cost_by_price' => 'required',
-                    'discount_cost' => 'required',
-                    'possibility_of_extension' => 'required'
-                ],
-                [
-                    'cost_by_price.required' => 'Поле "Цена по прайсу" обязательно для заполнения.',
-                    'discount_cost.required' => 'Поле "Цена со скидкой" обязательно для заполнения.',
-                    'possibility_of_extension.required' => 'Поле "Возможность продления" обязательно для заполнения.',
-                ]
-            );
+            if(!$sliv_id == $data['pay_format'])
+            {
+                unset($data['cost_by_price']);
+                unset($data['discount_cost']);
+                unset($data['possibility_of_extension']);
+            }else{
+                $request->validate(
+                    [
+                        'cost_by_price' => 'required',
+                        'discount_cost' => 'required',
+                        'possibility_of_extension' => 'required'
+                    ],
+                    [
+                        'cost_by_price.required' => 'Поле "Цена по прайсу" обязательно для заполнения.',
+                        'discount_cost.required' => 'Поле "Цена со скидкой" обязательно для заполнения.',
+                        'possibility_of_extension.required' => 'Поле "Возможность продления" обязательно для заполнения.',
+                    ]
+                );
+            }
         }
 
         $data['pay_format'] = json_encode($request->pay_format);
@@ -158,10 +178,18 @@ class OfferService
             return Response()->json(['message' => 'Такое предложение уже существует', 'errors' => ['error' => 'Такое предложение уже существует']], 422);
         }
 
-        $paySlugs = DB::table('pay_formats')
-            ->whereIn('id', json_decode($data['pay_format']))
-            ->pluck('slug')
-            ->all();
+        if(is_array($data['pay_format']))
+        {
+            $paySlugs = DB::table('pay_formats')
+                ->whereIn('id', json_decode($data['pay_format']))
+                ->pluck('slug')
+                ->all();
+        }else{
+            $paySlugs = DB::table('pay_formats')
+                ->where('id', $data['pay_format'])
+                ->pluck('slug')
+                ->all();
+        }
 
         // Проверка форматов оплаты
         if(in_array('trade', $paySlugs) && count($paySlugs) > 1){
