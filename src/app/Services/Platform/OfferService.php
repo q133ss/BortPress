@@ -118,7 +118,9 @@ class OfferService
 
         $sliv_id = PayFormat::where('slug', 'sliv')->pluck('id')->first();
 
-        $payFormats = $ad->getAttribute('pay_format')->pluck('id')->all();
+        //$payFormats = $ad->getAttribute('pay_format')->pluck('id')->all();
+        $payFormats = $data['pay_format'];
+
         if(!in_array($sliv_id, $payFormats))
         {
             unset($data['cost_by_price']);
@@ -166,14 +168,14 @@ class OfferService
             return Response()->json(['message' => 'При формате оплаты "обмен рекламным трафиком" нельзя выбрать другие варианты', 'errors' => ['error' => 'При формате оплаты "обмен рекламным трафиком" нельзя выбрать другие варианты']], 422);
         }
         if(in_array('sliv', $paySlugs)){
-            unset($paySlugs['cash']);
-            if(count($paySlugs) > 0){
+            $diff = array_diff($paySlugs, ['sliv', 'cash']);
+            if(count($diff) > 0){
                 return Response()->json(['message' => 'Вместе со сливом можно выбрать только денежные средства', 'errors' => ['error' => 'При формате оплаты "обмен рекламным трафиком" нельзя выбрать другие варианты']], 422);
             }
         }
         if(in_array('trade', $paySlugs) ){
-            unset($paySlugs['cash']);
-            if(count($paySlugs) > 0){
+            $diff = array_diff($paySlugs, ['trade', 'cash']);
+            if(count($diff) > 0){
                 return Response()->json(['message' => 'Вместе с "Обмен рекламным трафиком" можно выбрать только денежные средства', 'errors' => ['error' => 'При формате оплаты "обмен рекламным трафиком" нельзя выбрать другие варианты']], 422);
             }
         }
